@@ -183,7 +183,7 @@ const PasswordStrengthMeter: React.FC<{ strength: any }> = ({ strength }) => {
             {feedback.warning && (<p className="text-xs text-red-400">{feedback.warning}</p>)}
             {feedback.suggestions?.length > 0 && (
                  <ul className="text-xs text-gray-400 list-disc list-inside space-y-1">
-                    {feedback.suggestions.map((s, i) => (<li key={i}>{s}</li>))}
+                    {feedback.suggestions.map((s: string, i: number) => (<li key={i}>{s}</li>))}
                 </ul>
             )}
         </div>
@@ -762,7 +762,7 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey }) => {
   const currentUsageInfo = USAGE_DESCRIPTIONS[selectedUsage];
 
   const canBeUsedForEncryption = ['Asymmetric Encryption', 'Symmetric Encryption', 'PGP / GPG'].includes(selectedUsage);
-  const canBeUsedForSigning = ['Digital Signatures', 'SSH Authentication', 'PGP / GPG'].includes(selectedUsage);
+  const canBeUsedForSigning = ['Digital Signatures', 'PGP / GPG'].includes(selectedUsage);
 
 
   return (
