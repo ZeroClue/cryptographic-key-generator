@@ -1,0 +1,5 @@
+{
+  "name": "Cryptographic Key Generator",
+  "description": "A secure, browser-based tool to generate strong encryption keys for various cryptographic algorithms using the Web Crypto API. All keys are generated locally in your browser and are never transmitted.",
+  "requestFramePermissions": []
+}
