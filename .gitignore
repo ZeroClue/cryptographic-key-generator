@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 .armin/
+.opencode/
+opencode.json
