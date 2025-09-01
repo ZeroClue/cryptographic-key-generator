@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import zxcvbn from 'zxcvbn'; 
 import type { AlgorithmOption, KeyGenerationResult, KeyProperties } from '../types';
 import { ALGORITHM_OPTIONS, USAGE_DESCRIPTIONS, KEY_SIZE_OPTIONS, KEY_SIZE_DESCRIPTIONS, USAGE_DEFINITIONS, TABS } from '../constants';
 import { 
@@ -15,13 +16,13 @@ import {
   inspectKey,
 } from '../services/cryptoService';
 
-declare const zxcvbn: (password: string) => {
-    score: 0 | 1 | 2 | 3 | 4;
-    feedback: {
-        warning: string;
-        suggestions: string[];
-    };
-};
+// declare const zxcvbn: (password: string) => {
+//     score: 0 | 1 | 2 | 3 | 4;
+//     feedback: {
+//         warning: string;
+//         suggestions: string[];
+//     };
+// };
 
 // ===================================================================================
 // ICONS

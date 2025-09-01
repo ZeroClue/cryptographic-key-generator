@@ -1,6 +1,7 @@
+import * as openpgp from 'openpgp';
 import type { AlgorithmOption, KeyGenerationResult, PgpOptions, KeyProperties } from '../types';
 
-declare var openpgp: any;
+// declare var openpgp: any;
 
 /**
  * Checks if a given key object is a PGP key from openpgp.js.
