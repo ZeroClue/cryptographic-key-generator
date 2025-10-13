@@ -31,6 +31,7 @@
     "vite": "^6.3.5"
   },
   "description": "",
+  "homepage": "https://zeroclue.github.io/cryptographic-key-generator",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -42,5 +43,14 @@
   "bugs": {
     "url": "https://github.com/ZeroClue/cryptographic-key-generator/issues"
   },
-  "homepage": "https://github.com/ZeroClue/cryptographic-key-generator#readme"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZeroClue/cryptographic-key-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZeroClue/cryptographic-key-generator/issues"
+  }
 }
