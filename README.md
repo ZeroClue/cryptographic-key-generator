@@ -2,9 +2,30 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](https://zeroclue.github.io/cryptographic-key-generator)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blue)](https://zeroclue.github.io/cryptographic-key-generator)
-[![Deployment Status](https://img.shields.io/github/actions/deployment/status/ZeroClue/cryptographic-key-generator/pages?label=Deploy)](https://github.com/ZeroClue/cryptographic-key-generator/actions)
 
-🚀 **Live Demo**: [https://zeroclue.github.io/cryptographic-key-generator](https://zeroclue.github.io/cryptographic-key-generator)
+🚀 **Try It Now - Interactive Demo**
+<div align="center">
+  <div style="border: 2px solid #0969da; border-radius: 12px; padding: 16px; background: #f6f8fa; margin: 20px 0;">
+    <h3>🔐 Cryptographic Key Generator - Try It Live!</h3>
+    <p style="color: #656d76; margin-bottom: 16px;">Generate keys, encrypt messages, and create signatures directly in your browser</p>
+    <iframe 
+      src="https://zeroclue.github.io/cryptographic-key-generator" 
+      width="100%" 
+      height="600px" 
+      frameborder="0" 
+      style="border: 1px solid #d1d5da; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); background: white;"
+      loading="lazy">
+      <p>
+        <a href="https://zeroclue.github.io/cryptographic-key-generator" target="_blank" rel="noopener noreferrer">
+          🔐 Open Cryptographic Key Generator in New Tab
+        </a>
+      </p>
+    </iframe>
+    <p style="margin-top: 12px; font-size: 14px; color: #656d76;">
+      👆 <strong>Interactive Demo</strong> • No installation required • All operations happen in your browser
+    </p>
+  </div>
+</div>
 
 A comprehensive, browser-based cryptographic tool for generating, managing, and working with various types of cryptographic keys. Built with React, TypeScript, and Tailwind CSS, this application provides a secure and user-friendly interface for all your cryptographic needs.
 
