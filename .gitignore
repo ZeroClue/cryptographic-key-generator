@@ -26,3 +26,10 @@ dist-ssr
 .armin/
 .opencode/
 opencode.json
+.vscode/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
