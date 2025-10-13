@@ -6,24 +6,47 @@
 🚀 **Try It Now - Interactive Demo**
 
 <p align="center">
-  <strong>🔐 Cryptographic Key Generator - Try It Live!</strong><br>
-  Generate keys, encrypt messages, and create signatures directly in your browser
+  <a href="https://zeroclue.github.io/cryptographic-key-generator" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/🔐-Cryptographic%20Key%20Generator-brightgreen" alt="Cryptographic Key Generator" style="font-size: 24px; padding: 20px;">
+  </a>
 </p>
 
 <p align="center">
-  <iframe 
-    src="https://zeroclue.github.io/cryptographic-key-generator" 
-    width="100%" 
-    height="600px" 
-    frameborder="0" 
-    style="border: 2px solid #0969da; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
-    loading="lazy">
-  </iframe>
+  <strong>Generate keys, encrypt messages, and create signatures directly in your browser</strong><br>
+  <br>
+  <a href="https://zeroclue.github.io/cryptographic-key-generator" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/🚀-Try%20Live%20Demo-blue" alt="Try Live Demo" style="font-size: 18px;">
+  </a>
+  <a href="https://zeroclue.github.io/cryptographic-key-generator" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/⚡-No%20Installation%20Required-green" alt="No Installation Required" style="font-size: 18px;">
+  </a>
+  <a href="https://zeroclue.github.io/cryptographic-key-generator" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/🛡️-Client%20Side%20Only-orange" alt="Client Side Only" style="font-size: 18px;">
+  </a>
 </p>
 
 <p align="center">
-  <strong>👆 Interactive Demo</strong> • No installation required • All operations happen in your browser<br>
-  <small><a href="https://zeroclue.github.io/cryptographic-key-generator" target="_blank" rel="noopener noreferrer">🔐 Open in New Tab</a></small>
+  <table>
+    <tr>
+      <td align="center" style="padding: 20px; border: 2px solid #0969da; border-radius: 8px; background: #f6f8fa;">
+        <strong>🔑 Key Generation</strong><br>
+        <small>RSA, ECDSA, Ed25519, SSH, PGP</small>
+      </td>
+      <td align="center" style="padding: 20px; border: 2px solid #0969da; border-radius: 8px; background: #f6f8fa;">
+        <strong>🔐 Encryption</strong><br>
+        <small>AES, RSA-OAEP, ECDH</small>
+      </td>
+      <td align="center" style="padding: 20px; border: 2px solid #0969da; border-radius: 8px; background: #f6f8fa;">
+        <strong>✍️ Signatures</strong><br>
+        <small>ECDSA, RSA-PSS, PGP</small>
+      </td>
+    </tr>
+  </table>
+</p>
+
+<p align="center">
+  <strong>👆 Click any button above to launch the interactive demo</strong><br>
+  <small>All cryptographic operations happen securely in your browser</small>
 </p>
 
 A comprehensive, browser-based cryptographic tool for generating, managing, and working with various types of cryptographic keys. Built with React, TypeScript, and Tailwind CSS, this application provides a secure and user-friendly interface for all your cryptographic needs.
