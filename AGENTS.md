@@ -2,23 +2,24 @@
 
 ## Build/Lint/Test Commands
 - `npm run dev` - Start development server
-- `npm run build` - Build for production
+- `npm run build` - Build for production (TypeScript compile + Vite build)
 - `npm run preview` - Preview production build
-- No test framework configured (add vitest for testing)
-- No linter configured (add ESLint + TypeScript for linting)
+- `npm run test` - Run all Playwright tests
+- `npm run test:ui` - Run Playwright tests with UI
+- `npx playwright test [filename]` - Run single test file
 - `npx tsc --noEmit` - TypeScript type checking
 
 ## Code Style Guidelines
 
 ### TypeScript & React
-- Functional components with hooks only
+- Functional components with hooks only (no classes)
 - Strict TypeScript typing for all props/state
-- `interface` for props, `type` for unions
+- `interface` for object shapes, `type` for unions/primitives
 - `React.FC<Props>` for component annotations
+- Use `import type` for type-only imports
 
 ### Imports & Naming
-- Group: React/hooks → external libs → internal modules
-- `import type` for type-only imports
+- Group imports: React/hooks → external libs → internal modules
 - PascalCase: Components, Types, Interfaces
 - camelCase: Functions, variables
 - UPPER_SNAKE_CASE: Constants (TABS, ALGORITHM_OPTIONS)
@@ -27,12 +28,12 @@
 - Business logic in `services/` directory
 - UI logic in components only
 - Constants in `constants.ts`, types in `types.ts`
-- Tailwind CSS for styling with semantic colors
+- Tailwind CSS for styling with semantic color classes
 
 ### Security & Error Handling
 - Web Crypto API for all crypto operations
 - Never log sensitive data (keys/passwords)
-- Try/catch for async ops with user-friendly messages
+- Try/catch for async operations with user-friendly messages
 - Input validation on blur/submission
 - Loading states for async operations
 
