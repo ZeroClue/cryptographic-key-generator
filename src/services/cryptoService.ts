@@ -276,7 +276,7 @@ export async function exportPrivateKeyOpenSsh(key: CryptoKey, comment: string = 
       writeSshString(privateKeyBlob)
     );
   
-    const base64Key = arrayBufferToBase64(finalContent.buffer);
+    const base64Key = arrayBufferToBase64(finalContent.buffer as ArrayBuffer);
     return formatAsPem(base64Key, '-----BEGIN OPENSSH PRIVATE KEY-----', '-----END OPENSSH PRIVATE KEY-----');
 }
 
@@ -344,8 +344,8 @@ export async function exportPrivateKeyPutty(key: CryptoKey, comment: string = 'u
     const macKey = await crypto.subtle.importKey('raw', macKeyData, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
     const mac = await crypto.subtle.sign('HMAC', macKey, macData);
 
-    const publicB64 = (arrayBufferToBase64(publicBlob.buffer).match(/.{1,64}/g) || []).join('\n');
-    const privateB64 = (arrayBufferToBase64(privateBlob.buffer).match(/.{1,64}/g) || []).join('\n');
+    const publicB64 = (arrayBufferToBase64(publicBlob.buffer as ArrayBuffer).match(/.{1,64}/g) || []).join('\n');
+    const privateB64 = (arrayBufferToBase64(privateBlob.buffer as ArrayBuffer).match(/.{1,64}/g) || []).join('\n');
     const publicLines = publicB64.split('\n').length;
     const privateLines = privateB64.split('\n').length;
 
@@ -443,7 +443,7 @@ export async function exportSshPublicKey(key: CryptoKey, comment: string = 'user
     throw new Error('Unsupported key type for SSH public key export.');
   }
 
-  const base64Key = arrayBufferToBase64(keyData.buffer);
+  const base64Key = arrayBufferToBase64(keyData.buffer as ArrayBuffer);
   return `${keyTypeIdentifier} ${base64Key} ${comment}`;
 }
 

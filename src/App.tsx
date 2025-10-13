@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import KeyGenerator from './components/KeyGenerator';
 import EncryptDecrypt from './components/EncryptDecrypt';
 import SignVerify from './components/SignVerify';
@@ -7,6 +7,15 @@ import type { SharedKeyInfo, KeyProperties } from './types';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>(TABS.GENERATE);
+
+  // Handle GitHub Pages routing for SPA
+  useEffect(() => {
+    const redirect = sessionStorage.redirect;
+    delete sessionStorage.redirect;
+    if (redirect && redirect !== location.pathname) {
+      window.history.replaceState(null, '', redirect);
+    }
+  }, []);
   const [sharedKeyInfo, setSharedKeyInfo] = useState<SharedKeyInfo | null>(null);
 
   const handleKeyShare = (key: string, target: string, properties: KeyProperties) => {
