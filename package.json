@@ -30,25 +30,15 @@
     "typescript": "~5.8.2",
     "vite": "^6.3.5"
   },
-  "description": "",
+  "description": "A comprehensive cryptographic key generator supporting RSA, DSA, ECDSA, Ed25519, SSH, and PGP keys with advanced features",
   "homepage": "https://zeroclue.github.io/cryptographic-key-generator",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ZeroClue/cryptographic-key-generator.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ZeroClue/cryptographic-key-generator/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ZeroClue/cryptographic-key-generator.git"
-  },
-  "keywords": [],
-  "author": "",
+  "keywords": ["cryptography", "security", "keys", "rsa", "dsa", "ecdsa", "ed25519", "ssh", "pgp"],
+  "author": "ZeroClue",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ZeroClue/cryptographic-key-generator/issues"
