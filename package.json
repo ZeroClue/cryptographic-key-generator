@@ -39,7 +39,7 @@
   },
   "keywords": ["cryptography", "security", "keys", "rsa", "dsa", "ecdsa", "ed25519", "ssh", "pgp"],
   "author": "ZeroClue",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ZeroClue/cryptographic-key-generator/issues"
   }
