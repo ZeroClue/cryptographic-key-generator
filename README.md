@@ -1,5 +1,10 @@
 # Cryptographic Key Generator
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](https://zeroclue.github.io/cryptographic-key-generator)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blue)](https://zeroclue.github.io/cryptographic-key-generator)
+
+🚀 **Live Demo**: [https://zeroclue.github.io/cryptographic-key-generator](https://zeroclue.github.io/cryptographic-key-generator)
+
 A comprehensive, browser-based cryptographic tool for generating, managing, and working with various types of cryptographic keys. Built with React, TypeScript, and Tailwind CSS, this application provides a secure and user-friendly interface for all your cryptographic needs.
 
 ## 🚀 Features
