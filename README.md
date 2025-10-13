@@ -2,6 +2,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](https://zeroclue.github.io/cryptographic-key-generator)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blue)](https://zeroclue.github.io/cryptographic-key-generator)
+[![Deployment Status](https://img.shields.io/github/actions/deployment/status/ZeroClue/cryptographic-key-generator/pages?label=Deploy)](https://github.com/ZeroClue/cryptographic-key-generator/actions)
 
 🚀 **Live Demo**: [https://zeroclue.github.io/cryptographic-key-generator](https://zeroclue.github.io/cryptographic-key-generator)
 
