@@ -213,7 +213,7 @@ const SecurityWarningModal: React.FC<{ isOpen: boolean; onClose: () => void; onC
     );
 };
 
-const KeyOutput: React.FC<{ title: string; value: string; isLoading: boolean; placeholder: string; error: string | null; }> = ({ title, value, isLoading, placeholder, error }) => {
+const KeyOutput: React.FC<{ title: string; value: string; isLoading: boolean; placeholder: string; error: string | null; }> = React.memo(({ title, value, isLoading, placeholder, error }) => {
     const [isCopied, setIsCopied] = useState(false);
     const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
@@ -281,9 +281,9 @@ const KeyOutput: React.FC<{ title: string; value: string; isLoading: boolean; pl
             </div>
         </div>
     );
-};
+});
 
-const CommandLineEquivalent: React.FC<{ command: string | null }> = ({ command }) => {
+const CommandLineEquivalent: React.FC<{ command: string | null }> = React.memo(({ command }) => {
     const [isCopied, setIsCopied] = useState(false);
     if (!command) return null;
     const handleCopy = () => {
@@ -307,7 +307,7 @@ const CommandLineEquivalent: React.FC<{ command: string | null }> = ({ command }
             </div>
         </div>
     );
-};
+});
 
 const KeyGenerationForm: React.FC<any> = ({
     selectedUsage, setSelectedUsage, filteredAlgorithms, selectedAlgorithm,
