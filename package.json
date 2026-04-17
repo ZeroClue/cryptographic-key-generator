@@ -27,6 +27,7 @@
     "@types/react-dom": "^19.1.9",
     "@types/zxcvbn": "^4.4.5",
     "@vitejs/plugin-react": "^5.0.2",
+    "@vitest/coverage-v8": "^2.1.9",
     "autoprefixer": "^10.4.21",
     "jsdom": "^24.0.0",
     "postcss": "^8.5.6",
@@ -42,7 +43,17 @@
     "type": "git",
     "url": "git+https://github.com/ZeroClue/cryptographic-key-generator.git"
   },
-  "keywords": ["cryptography", "security", "keys", "rsa", "dsa", "ecdsa", "ed25519", "ssh", "pgp"],
+  "keywords": [
+    "cryptography",
+    "security",
+    "keys",
+    "rsa",
+    "dsa",
+    "ecdsa",
+    "ed25519",
+    "ssh",
+    "pgp"
+  ],
   "author": "ZeroClue",
   "license": "MIT",
   "bugs": {

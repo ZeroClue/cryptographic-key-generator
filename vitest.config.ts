@@ -12,8 +12,13 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      include: ['src/**/*.ts', 'src/**/*.tsx'],
+      include: ['src/services/crypto/**/*.ts'],
       exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 75,
+      },
     },
     poolOptions: {
       threads: {
