@@ -191,9 +191,44 @@ const PasswordStrengthMeter: React.FC<{ strength: ZxcvbnResult | null }> = ({ st
 };
 
 const SecurityWarningModal: React.FC<{ isOpen: boolean; onClose: () => void; onConfirm: () => void; }> = ({ isOpen, onClose, onConfirm }) => {
+    const modalRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (isOpen) {
+            // Focus first focusable element
+            const focusableElements = modalRef.current?.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            ) as NodeListOf<HTMLElement>;
+            const firstElement = focusableElements?.[0];
+            firstElement?.focus();
+
+            // Trap focus within modal and handle Escape key
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === 'Escape') {
+                    onClose();
+                }
+                if (e.key === 'Tab' && focusableElements) {
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+
+                    if (e.shiftKey && document.activeElement === firstElement) {
+                        e.preventDefault();
+                        lastElement.focus();
+                    } else if (!e.shiftKey && document.activeElement === lastElement) {
+                        e.preventDefault();
+                        firstElement.focus();
+                    }
+                }
+            };
+
+            document.addEventListener('keydown', handleKeyDown);
+            return () => document.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [isOpen, onClose]);
+
     if (!isOpen) return null;
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="security-warning-title">
+        <div ref={modalRef} className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="security-warning-title">
             <div className="bg-brand-secondary rounded-lg shadow-xl p-6 max-w-md w-full border border-yellow-500/30">
                 <h2 id="security-warning-title" className="text-xl font-bold text-yellow-400 flex items-center gap-3">
                     <WarningIcon className="w-6 h-6" /> Security Warning
