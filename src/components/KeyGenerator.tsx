@@ -215,15 +215,30 @@ const SecurityWarningModal: React.FC<{ isOpen: boolean; onClose: () => void; onC
 
 const KeyOutput: React.FC<{ title: string; value: string; isLoading: boolean; placeholder: string; error: string | null; }> = ({ title, value, isLoading, placeholder, error }) => {
     const [isCopied, setIsCopied] = useState(false);
+    const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
     const handleCopy = useCallback(() => {
         if (isCopied || !value) return;
         navigator.clipboard.writeText(value).then(() => {
             setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 2000);
+            // Clear any existing timeout before setting a new one
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+            timeoutRef.current = setTimeout(() => setIsCopied(false), 2000);
         });
     }, [value, isCopied]);
 
-    useEffect(() => { setIsCopied(false); }, [value]);
+    useEffect(() => {
+        setIsCopied(false);
+        return () => {
+            // Cleanup function - called on unmount
+            // Clear any pending timeout to prevent memory leaks
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, [value]);
 
     return (
         <div>
