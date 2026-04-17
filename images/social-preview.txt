@@ -1,0 +1,31 @@
+Social Preview Image Instructions
+
+File: social-preview.png
+Dimensions: 1200x630 pixels
+
+Design Requirements:
+- Title: "Cryptographic Key Generator" (large, bold)
+- Tagline: "Secure. Client-Side. Open Source."
+- Visual: Key icons (🔐, 🔑, ⚡) or app preview
+- URL: "cryptokeygen.com" at bottom
+- Colors: Use brand colors from app (dark theme)
+- Font: Clean, readable sans-serif
+
+Tools to use:
+- Figma
+- Canva
+- Photoshop/GIMP
+- Any image editor
+
+Instructions:
+1. Create a 1200x630px canvas
+2. Use dark background (matching app's dark theme)
+3. Add title in large bold font (white/light color)
+4. Add tagline below title
+5. Include key icons or app screenshot
+6. Add URL at bottom
+7. Ensure good contrast for readability
+8. Save as social-preview.png
+
+Placeholder Implementation:
+Since this is an AI agent, I cannot create actual PNG files. This text file serves as documentation for the actual implementation that needs to be done manually.
