@@ -1,3 +1,5 @@
+import type { KeyType as WebCryptoKeyType } from 'crypto';
+
 export type AlgorithmOption =
   // Symmetric Encryption
   | 'AES-128-GCM'
@@ -69,7 +71,7 @@ export interface PgpOptions {
 }
 
 export interface KeyProperties {
-  type: KeyType | 'public' | 'private';
+  type: WebCryptoKeyType | 'public' | 'private';
   algorithm: string;
   size: string;
   usages: KeyUsage[] | string[];
