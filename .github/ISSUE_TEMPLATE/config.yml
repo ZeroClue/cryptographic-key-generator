@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Documentation
-    url: https://github.com/ZeroClue/cryptographic-key-generator/blob/main/docs/README.md
+    url: https://github.com/ZeroClue/cryptographic-key-generator/blob/main/README.md
     about: Please check the documentation before creating an issue
