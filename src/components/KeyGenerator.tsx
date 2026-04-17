@@ -19,6 +19,7 @@ import KeyOutputSkeleton from './Loading/KeyOutputSkeleton';
 import GenerationProgress from './Loading/GenerationProgress';
 import AlgorithmTooltip from './Tooltips/AlgorithmTooltip';
 import KeyHistoryDropdown from './KeyHistory/KeyHistoryDropdown';
+import CopyButton from './CopyButton';
 import { addToKeyHistory } from '../utils/keyHistory';
 
 interface ZxcvbnResult {
@@ -262,6 +263,7 @@ interface KeyOutputProps {
   algorithm?: string;
   properties?: KeyProperties;
   onCopyToHistory?: (key: string, algorithm: string, properties: KeyProperties) => void;
+  error?: string;
 }
 
 const KeyOutput: React.FC<KeyOutputProps> = React.memo(({
@@ -274,31 +276,6 @@ const KeyOutput: React.FC<KeyOutputProps> = React.memo(({
   properties,
   onCopyToHistory
 }) => {
-    const [isCopied, setIsCopied] = useState(false);
-    const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-
-    const handleCopy = useCallback(() => {
-        if (isCopied || !value) return;
-        navigator.clipboard.writeText(value).then(() => {
-            setIsCopied(true);
-            // Clear any existing timeout before setting a new one
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-            timeoutRef.current = setTimeout(() => setIsCopied(false), 2000);
-        });
-    }, [value, isCopied]);
-
-    useEffect(() => {
-        setIsCopied(false);
-        return () => {
-            // Cleanup function - called on unmount
-            // Clear any pending timeout to prevent memory leaks
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-        };
-    }, [value]);
 
     return (
         <div>
@@ -333,11 +310,14 @@ const KeyOutput: React.FC<KeyOutputProps> = React.memo(({
                             className="w-full p-4 bg-brand-dark rounded-md shadow-inner text-sm font-mono min-h-[12rem] max-h-96 border border-gray-700 resize-none text-gray-300 focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition placeholder-gray-500"
                         />
                          {value && (
-                            <div className="absolute top-3 right-3 flex items-center gap-2">
-                                <button onClick={handleCopy} disabled={isCopied} aria-label={isCopied ? 'Copied!' : 'Copy key to clipboard'}
-                                    className={`flex items-center gap-2 px-3 py-1.5 text-xs font-bold rounded-md transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-brand-dark ${isCopied ? 'bg-green-500 text-white cursor-default' : 'bg-gray-700 text-gray-300 hover:bg-gray-600 focus:ring-brand-primary'}`}>
-                                    {isCopied ? (<><CheckIcon className="w-4 h-4" /><span>Copied!</span></>) : (<><CopyIcon className="w-4 h-4" /><span>Copy</span></>)}
-                                </button>
+                            <div className="absolute top-3 right-3">
+                                <CopyButton
+                                    text={value}
+                                    size="sm"
+                                    variant="ghost"
+                                    className="flex items-center gap-2 px-3 py-1.5"
+                                    ariaLabel="Copy key to clipboard"
+                                />
                             </div>
                         )}
                     </>
@@ -348,25 +328,21 @@ const KeyOutput: React.FC<KeyOutputProps> = React.memo(({
 });
 
 const CommandLineEquivalent: React.FC<{ command: string | null }> = React.memo(({ command }) => {
-    const [isCopied, setIsCopied] = useState(false);
     if (!command) return null;
-    const handleCopy = () => {
-        if (isCopied) return;
-        navigator.clipboard.writeText(command).then(() => {
-            setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 2000);
-        });
-    };
     return (
         <div className="space-y-3">
             <h3 className="text-base font-semibold text-gray-200 flex items-center gap-2">
                 <TerminalIcon className="w-5 h-5 text-gray-400" /> Command-Line Equivalent
             </h3>
             <div className="relative p-3 bg-brand-dark rounded-md border border-gray-700 font-mono text-sm text-gray-300">
-                <button onClick={handleCopy} aria-label={isCopied ? 'Copied!' : 'Copy command'}
-                    className={`absolute top-2 right-2 p-1.5 text-xs rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-brand-dark ${isCopied ? 'bg-green-500/20 text-green-300' : 'bg-gray-700 text-gray-300 hover:bg-gray-600 focus:ring-brand-primary'}`}>
-                    {isCopied ? <CheckIcon className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
-                </button>
+                <CopyButton
+                    text={command}
+                    size="sm"
+                    variant="ghost"
+                    className="absolute top-2 right-2"
+                    ariaLabel="Copy command"
+                    showTooltip
+                />
                 <code className="pr-10 block whitespace-pre-wrap break-all">{command}</code>
             </div>
         </div>
@@ -545,11 +521,32 @@ const ExportOptions: React.FC<any> = ({
     );
 };
 
-const KeyDisplay: React.FC<any> = ({
+interface KeyDisplayProps {
+    isAsymmetricMode: boolean;
+    isSsh: boolean;
+    asymmetricExportFormat: 'pem' | 'jwk';
+    isSymmetric: boolean;
+    symmetricExportFormat: 'base64' | 'hex';
+    publicKeyOutput: string;
+    privateKeyOutput: string;
+    symmetricOutput: string;
+    isLoading: boolean;
+    error: string | null;
+    isPgp: boolean;
+    onCopyToHistory?: (key: string, algorithm: string, properties: KeyProperties) => void;
+    selectedAlgorithm?: string;
+    selectedKeySize?: string;
+    generationResult?: KeyGenerationResult | null;
+}
+
+const KeyDisplay: React.FC<KeyDisplayProps> = ({
     isAsymmetricMode, isSsh, asymmetricExportFormat, isSymmetric, symmetricExportFormat,
     publicKeyOutput, privateKeyOutput, symmetricOutput, isLoading, error,
     isPgp,
-    onCopyToHistory
+    onCopyToHistory,
+    selectedAlgorithm,
+    selectedKeySize,
+    generationResult
 }) => (
     <div className="space-y-6">
         {isPgp && isLoading ? (
@@ -566,9 +563,13 @@ const KeyDisplay: React.FC<any> = ({
                     error={error}
                     placeholder="Your public key will appear here."
                     algorithm={selectedAlgorithm}
-                    properties={generationResult?.type === 'asymmetric' ? (selectedUsage === 'SSH Authentication' ?
-                        { type: 'public', algorithm: 'SSH', size: selectedKeySize, usages: ['encrypt'], extractable: true } :
-                        { type: 'public', algorithm: selectedAlgorithm, size: selectedKeySize, usages: ['encrypt'], extractable: true }) : undefined}
+                    properties={selectedAlgorithm && selectedKeySize ? {
+                        type: 'public',
+                        algorithm: isSsh ? 'SSH' : selectedAlgorithm,
+                        size: selectedKeySize,
+                        usages: ['encrypt'],
+                        extractable: true
+                    } : undefined}
                     onCopyToHistory={onCopyToHistory}
                 />
                 <KeyOutput title={isSsh ? "Private Key" : isPgp ? "Private Key (PGP)" : `Private Key (${asymmetricExportFormat.toUpperCase()})`}
@@ -577,9 +578,13 @@ const KeyDisplay: React.FC<any> = ({
                     error={error}
                     placeholder="Your private key will appear here."
                     algorithm={selectedAlgorithm}
-                    properties={generationResult?.type === 'asymmetric' ? (selectedUsage === 'SSH Authentication' ?
-                        { type: 'private', algorithm: 'SSH', size: selectedKeySize, usages: ['sign'], extractable: true } :
-                        { type: 'private', algorithm: selectedAlgorithm, size: selectedKeySize, usages: ['sign'], extractable: true }) : undefined}
+                    properties={selectedAlgorithm && selectedKeySize ? {
+                        type: 'private',
+                        algorithm: isSsh ? 'SSH' : selectedAlgorithm,
+                        size: selectedKeySize,
+                        usages: ['sign'],
+                        extractable: true
+                    } : undefined}
                     onCopyToHistory={onCopyToHistory}
                 />
             </div>
@@ -590,8 +595,13 @@ const KeyDisplay: React.FC<any> = ({
                     error={error}
                     placeholder="Your generated key will appear here."
                     algorithm={selectedAlgorithm}
-                    properties={generationResult?.type === 'symmetric' ?
-                        { type: 'symmetric', algorithm: selectedAlgorithm, size: 'N/A', usages: ['encrypt', 'decrypt'], extractable: true } : undefined}
+                    properties={selectedAlgorithm ? {
+                        type: 'symmetric',
+                        algorithm: selectedAlgorithm,
+                        size: 'N/A',
+                        usages: ['encrypt', 'decrypt'],
+                        extractable: true
+                    } : undefined}
                     onCopyToHistory={onCopyToHistory}
                 />
         )}
@@ -924,8 +934,21 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
                 )}
                 
                 <KeyDisplay
-                    {...{ isAsymmetricMode, isSsh, asymmetricExportFormat, isSymmetric, symmetricExportFormat, publicKeyOutput, privateKeyOutput, symmetricOutput, isLoading, error, isPgp }}
+                    isAsymmetricMode={isAsymmetricMode}
+                    isSsh={isSsh}
+                    asymmetricExportFormat={asymmetricExportFormat}
+                    isSymmetric={isSymmetric}
+                    symmetricExportFormat={symmetricExportFormat}
+                    publicKeyOutput={publicKeyOutput}
+                    privateKeyOutput={privateKeyOutput}
+                    symmetricOutput={symmetricOutput}
+                    isLoading={isLoading}
+                    error={error}
+                    isPgp={isPgp}
                     onCopyToHistory={(key, algorithm, properties) => addToKeyHistory(key, algorithm, properties)}
+                    selectedAlgorithm={selectedAlgorithm}
+                    selectedKeySize={selectedKeySize}
+                    generationResult={generationResult}
                 />
 
                 {generationResult && (
