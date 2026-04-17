@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { KeyProperties, SharedKeyInfo } from '../types';
-import { importAndInspectKey, encrypt, decrypt, importKey } from '../services/cryptoService';
+import { importAndInspectKey, importKey } from '../services/crypto';
+import { encrypt, decrypt } from '../services/crypto/operations';
 import { TABS } from '../constants';
 
 const USAGE_DISPLAY_MAP: Record<string, string> = {

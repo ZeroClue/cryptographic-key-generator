@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { KeyProperties, SharedKeyInfo } from '../types';
-import { importAndInspectKey, sign, verify, importKey } from '../services/cryptoService';
+import { importAndInspectKey, importKey } from '../services/crypto';
+import { sign, verify } from '../services/crypto/operations';
 import { TABS } from '../constants';
 
 
