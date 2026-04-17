@@ -687,6 +687,26 @@ async function importJwk(jwk: JsonWebKey): Promise<CryptoKey> {
 }
 
 async function importRaw(raw: string, encoding: 'base64' | 'hex' = 'base64'): Promise<CryptoKey> {
+    // Validate input length
+    const minLength = encoding === 'base64' ? 16 : 32; // 128 bits minimum
+    const maxLength = encoding === 'base64' ? 512 : 1024; // Reasonable upper bound
+
+    if (raw.length < minLength || raw.length > maxLength) {
+        throw new Error(
+            `Invalid key length: ${raw.length} characters. Expected ${minLength}-${maxLength} characters.`
+        );
+    }
+
+    // Validate characters for hex encoding
+    if (encoding === 'hex' && !/^[0-9a-fA-F]*$/.test(raw)) {
+        throw new Error('Invalid hexadecimal characters in key.');
+    }
+
+    // Validate characters for base64 encoding
+    if (encoding === 'base64' && !/^[A-Za-z0-9+/]*={0,2}$/.test(raw)) {
+        throw new Error('Invalid Base64 characters in key.');
+    }
+
     const buffer = encoding === 'base64' ? base64ToArrayBuffer(raw) : hexToArrayBuffer(raw);
 
     // Try importing as various AES key types
