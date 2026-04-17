@@ -71,7 +71,7 @@ export interface PgpOptions {
 }
 
 export interface KeyProperties {
-  type: WebCryptoKeyType | 'public' | 'private';
+  type: WebCryptoKeyType | 'public' | 'private' | 'symmetric';
   algorithm: string;
   size: string;
   usages: KeyUsage[] | string[];

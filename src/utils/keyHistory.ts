@@ -54,14 +54,14 @@ export const getKeyHistory = (): KeyHistoryItem[] => {
     const history = JSON.parse(stored);
     // Validate and sort by timestamp (newest first)
     return history
-      .filter(item =>
+      .filter((item: KeyHistoryItem) =>
         item.id &&
         item.key &&
         item.algorithm &&
         item.timestamp &&
         item.properties
       )
-      .sort((a, b) => b.timestamp - a.timestamp);
+      .sort((a: KeyHistoryItem, b: KeyHistoryItem) => b.timestamp - a.timestamp);
   } catch (error) {
     console.error('Error reading key history:', error);
     return [];

@@ -1,6 +1,6 @@
 import type { AlgorithmOption } from './types';
 
-interface Algorithm {
+export interface Algorithm {
   value: string;
   label: string;
   group: string;

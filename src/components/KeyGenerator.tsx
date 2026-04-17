@@ -264,7 +264,6 @@ interface KeyOutputProps {
   algorithm?: string;
   properties?: KeyProperties;
   onCopyToHistory?: (key: string, algorithm: string, properties: KeyProperties) => void;
-  error?: string;
 }
 
 const KeyOutput: React.FC<KeyOutputProps> = React.memo(({
