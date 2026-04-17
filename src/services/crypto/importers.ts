@@ -69,27 +69,28 @@ async function importJwk(jwk: JsonWebKey): Promise<CryptoKey> {
  * @returns A promise that resolves to the imported CryptoKey.
  */
 async function importRaw(raw: string, encoding: 'base64' | 'hex' = 'base64'): Promise<CryptoKey> {
-  // Validate input length
-  const minLength = encoding === 'base64' ? 16 : 32; // 128 bits minimum
-  const maxLength = encoding === 'base64' ? 512 : 1024; // Reasonable upper bound
-
-  if (raw.length < minLength || raw.length > maxLength) {
-    throw new Error(
-      `Invalid key length: ${raw.length} characters. Expected ${minLength}-${maxLength} characters.`
-    );
-  }
-
-  // Validate characters for hex encoding
+  // Validate characters before decoding to catch invalid inputs early
   if (encoding === 'hex' && !/^[0-9a-fA-F]*$/.test(raw)) {
     throw new Error('Invalid hexadecimal characters in key.');
   }
 
-  // Validate characters for base64 encoding
   if (encoding === 'base64' && !/^[A-Za-z0-9+/]*={0,2}$/.test(raw)) {
     throw new Error('Invalid Base64 characters in key.');
   }
 
+  // Decode first to get actual byte length
   const buffer = encoding === 'base64' ? base64ToArrayBuffer(raw) : hexToArrayBuffer(raw);
+  const byteLength = buffer.byteLength;
+
+  // Validate byte length (128 bits minimum, 4096 bits maximum)
+  const minBytes = 16; // 128 bits
+  const maxBytes = 512; // 4096 bits
+
+  if (byteLength < minBytes || byteLength > maxBytes) {
+    throw new Error(
+      `Invalid key length: ${byteLength} bytes (${byteLength * 8} bits). Expected ${minBytes}-${maxBytes} bytes.`
+    );
+  }
 
   // Try importing as various AES key types
   const keyLengths = [128, 192, 256];
@@ -128,13 +129,31 @@ export async function importKey(keyData: string): Promise<CryptoKey | any> {
   try {
     const jwk = JSON.parse(keyData);
     if (jwk.kty) { return await importJwk(jwk); }
-  } catch (e) { /* Not a JSON, so continue */ }
+  } catch (e) {
+    // If it's a JWK parsing/import error, re-throw it
+    if (e instanceof Error && e.message.includes('JWK')) {
+      throw e;
+    }
+    /* Not a JSON or other error, so continue */
+  }
 
   if (keyData.startsWith('-----BEGIN')) {
     return await importPem(keyData);
   }
 
-  try { return await importRaw(keyData); } catch (e) { /* Failed raw import */ }
+  // Auto-detect hex vs base64 encoding
+  let encoding: 'base64' | 'hex' = 'base64';
+  if (/^[0-9a-fA-F]+$/.test(keyData) && keyData.length % 2 === 0) {
+    encoding = 'hex';
+  }
+
+  try { return await importRaw(keyData, encoding); } catch (e) {
+    // Re-throw validation errors from importRaw with more context
+    if (e instanceof Error) {
+      throw e;
+    }
+    /* Failed raw import */
+  }
 
   throw new Error("Unsupported key format. Please provide a valid PEM, JWK, PGP, Base64, or Hex key.");
 }
