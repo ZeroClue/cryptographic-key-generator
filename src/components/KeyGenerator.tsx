@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import zxcvbn from 'zxcvbn'; 
+import zxcvbn from 'zxcvbn';
 import type { AlgorithmOption, KeyGenerationResult, KeyProperties } from '../types';
 import { ALGORITHM_OPTIONS, USAGE_DESCRIPTIONS, KEY_SIZE_OPTIONS, KEY_SIZE_DESCRIPTIONS, USAGE_DEFINITIONS, TABS } from '../constants';
-import { 
-  generateKey, 
-  exportPublicKeyPem, 
-  exportPrivateKeyPem, 
+import {
+  generateKey,
+  exportPublicKeyPem,
+  exportPrivateKeyPem,
   exportSymmetricKey,
   exportPublicKeyJwk,
   exportPrivateKeyJwk,
@@ -16,13 +16,13 @@ import {
   inspectKey,
 } from '../services/cryptoService';
 
-// declare const zxcvbn: (password: string) => {
-//     score: 0 | 1 | 2 | 3 | 4;
-//     feedback: {
-//         warning: string;
-//         suggestions: string[];
-//     };
-// };
+interface ZxcvbnResult {
+  score: 0 | 1 | 2 | 3 | 4;
+  feedback: {
+    warning: string;
+    suggestions: string[];
+  };
+}
 
 // ===================================================================================
 // ICONS
@@ -165,7 +165,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({ options, selected, 
     </div>
 );
 
-const PasswordStrengthMeter: React.FC<{ strength: any }> = ({ strength }) => {
+const PasswordStrengthMeter: React.FC<{ strength: ZxcvbnResult | null }> = ({ strength }) => {
     if (!strength) return null;
     const { score, feedback } = strength;
     const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
@@ -503,7 +503,7 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey }) => {
   const [sshExportFormat, setSshExportFormat] = useState<'pem' | 'openssh' | 'putty'>('pem');
   const [pgpUserInfo, setPgpUserInfo] = useState({ name: '', email: '', passphrase: '', confirmPassphrase: '' });
   const [pgpFormErrors, setPgpFormErrors] = useState({ name: '', email: '', confirmPassphrase: '' });
-  const [passphraseStrength, setPassphraseStrength] = useState<any>(null);
+  const [passphraseStrength, setPassphraseStrength] = useState<ZxcvbnResult | null>(null);
   const [commandLineEquivalent, setCommandLineEquivalent] = useState<string | null>(null);
 
   // State for key display strings
