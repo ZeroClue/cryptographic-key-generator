@@ -1,0 +1,20 @@
+name: Cryptographic Key Generator
+description: Generate cryptographic keys securely in your browser. RSA, ECC, PGP, SSH keys. Client-side only, zero data transmission, open source.
+topics:
+  - cryptography
+  - security
+  - pgp
+  - ssh
+  - rsa
+  - ecdsa
+  - ed25519
+  - key-generator
+  - web-security
+  - client-side-crypto
+  - web-crypto-api
+  - openpgp
+  - x509
+  - jwt
+  - zero-trust
+language: TypeScript
+license: MIT
