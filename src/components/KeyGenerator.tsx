@@ -18,6 +18,8 @@ import { importAndInspectKey, inspectKey } from '../services/crypto/importers';
 import KeyOutputSkeleton from './Loading/KeyOutputSkeleton';
 import GenerationProgress from './Loading/GenerationProgress';
 import AlgorithmTooltip from './Tooltips/AlgorithmTooltip';
+import KeyHistoryDropdown from './KeyHistory/KeyHistoryDropdown';
+import { addToKeyHistory } from '../utils/keyHistory';
 
 interface ZxcvbnResult {
   score: 0 | 1 | 2 | 3 | 4;
@@ -251,7 +253,27 @@ const SecurityWarningModal: React.FC<{ isOpen: boolean; onClose: () => void; onC
     );
 };
 
-const KeyOutput: React.FC<{ title: string; value: string; isLoading: boolean; placeholder: string; error: string | null; }> = React.memo(({ title, value, isLoading, placeholder, error }) => {
+interface KeyOutputProps {
+  title: string;
+  value: string;
+  isLoading: boolean;
+  placeholder: string;
+  error: string | null;
+  algorithm?: string;
+  properties?: KeyProperties;
+  onCopyToHistory?: (key: string, algorithm: string, properties: KeyProperties) => void;
+}
+
+const KeyOutput: React.FC<KeyOutputProps> = React.memo(({
+  title,
+  value,
+  isLoading,
+  placeholder,
+  error,
+  algorithm,
+  properties,
+  onCopyToHistory
+}) => {
     const [isCopied, setIsCopied] = useState(false);
     const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
@@ -280,7 +302,14 @@ const KeyOutput: React.FC<{ title: string; value: string; isLoading: boolean; pl
 
     return (
         <div>
-            <h2 className="text-lg font-semibold text-gray-200 mb-2">{title}</h2>
+            <div className="flex items-center justify-between mb-2">
+                <h2 className="text-lg font-semibold text-gray-200">{title}</h2>
+                {value && algorithm && properties && onCopyToHistory && (
+                    <KeyHistoryDropdown
+                        onSelect={(key, props) => onCopyToHistory(key, algorithm, props)}
+                    />
+                )}
+            </div>
             <div className="relative">
                 {isLoading && (
                     <KeyOutputSkeleton title={title} />
@@ -519,7 +548,8 @@ const ExportOptions: React.FC<any> = ({
 const KeyDisplay: React.FC<any> = ({
     isAsymmetricMode, isSsh, asymmetricExportFormat, isSymmetric, symmetricExportFormat,
     publicKeyOutput, privateKeyOutput, symmetricOutput, isLoading, error,
-    isPgp
+    isPgp,
+    onCopyToHistory
 }) => (
     <div className="space-y-6">
         {isPgp && isLoading ? (
@@ -535,11 +565,35 @@ const KeyDisplay: React.FC<any> = ({
                     isLoading={isLoading}
                     error={error}
                     placeholder="Your public key will appear here."
+                    algorithm={selectedAlgorithm}
+                    properties={generationResult?.type === 'asymmetric' ? (selectedUsage === 'SSH Authentication' ?
+                        { type: 'public', algorithm: 'SSH', size: selectedKeySize, usages: ['encrypt'], extractable: true } :
+                        { type: 'public', algorithm: selectedAlgorithm, size: selectedKeySize, usages: ['encrypt'], extractable: true }) : undefined}
+                    onCopyToHistory={onCopyToHistory}
                 />
-                <KeyOutput title={isSsh ? "Private Key" : isPgp ? "Private Key (PGP)" : `Private Key (${asymmetricExportFormat.toUpperCase()})`} value={privateKeyOutput} isLoading={isLoading} error={error} placeholder="Your private key will appear here." />
+                <KeyOutput title={isSsh ? "Private Key" : isPgp ? "Private Key (PGP)" : `Private Key (${asymmetricExportFormat.toUpperCase()})`}
+                    value={privateKeyOutput}
+                    isLoading={isLoading}
+                    error={error}
+                    placeholder="Your private key will appear here."
+                    algorithm={selectedAlgorithm}
+                    properties={generationResult?.type === 'asymmetric' ? (selectedUsage === 'SSH Authentication' ?
+                        { type: 'private', algorithm: 'SSH', size: selectedKeySize, usages: ['sign'], extractable: true } :
+                        { type: 'private', algorithm: selectedAlgorithm, size: selectedKeySize, usages: ['sign'], extractable: true }) : undefined}
+                    onCopyToHistory={onCopyToHistory}
+                />
             </div>
         ) : (
-            <KeyOutput title={isSymmetric ? `Generated Key (${symmetricExportFormat === 'hex' ? 'Hex' : 'Base64'})` : "Generated Key"} value={symmetricOutput} isLoading={isLoading} error={error} placeholder="Your generated key will appear here." />
+            <KeyOutput title={isSymmetric ? `Generated Key (${symmetricExportFormat === 'hex' ? 'Hex' : 'Base64'})` : "Generated Key"}
+                    value={symmetricOutput}
+                    isLoading={isLoading}
+                    error={error}
+                    placeholder="Your generated key will appear here."
+                    algorithm={selectedAlgorithm}
+                    properties={generationResult?.type === 'symmetric' ?
+                        { type: 'symmetric', algorithm: selectedAlgorithm, size: 'N/A', usages: ['encrypt', 'decrypt'], extractable: true } : undefined}
+                    onCopyToHistory={onCopyToHistory}
+                />
         )}
     </div>
 );
@@ -869,7 +923,10 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
                     </div>
                 )}
                 
-                <KeyDisplay {...{ isAsymmetricMode, isSsh, asymmetricExportFormat, isSymmetric, symmetricExportFormat, publicKeyOutput, privateKeyOutput, symmetricOutput, isLoading, error, isPgp }} />
+                <KeyDisplay
+                    {...{ isAsymmetricMode, isSsh, asymmetricExportFormat, isSymmetric, symmetricExportFormat, publicKeyOutput, privateKeyOutput, symmetricOutput, isLoading, error, isPgp }}
+                    onCopyToHistory={(key, algorithm, properties) => addToKeyHistory(key, algorithm, properties)}
+                />
 
                 {generationResult && (
                   <div className="space-y-4">
