@@ -17,6 +17,7 @@ import {
 import { importAndInspectKey, inspectKey } from '../services/crypto/importers';
 import KeyOutputSkeleton from './Loading/KeyOutputSkeleton';
 import GenerationProgress from './Loading/GenerationProgress';
+import AlgorithmTooltip from './Tooltips/AlgorithmTooltip';
 
 interface ZxcvbnResult {
   score: 0 | 1 | 2 | 3 | 4;
@@ -368,11 +369,30 @@ const KeyGenerationForm: React.FC<any> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                 <div className={availableKeySizes ? 'md:col-span-1' : 'md:col-span-2'}>
                     <label htmlFor="algorithm-select" className="block text-sm font-medium text-gray-300 mb-2">Choose Algorithm</label>
-                    <select id="algorithm-select" value={selectedAlgorithm} onChange={(e) => setSelectedAlgorithm(e.target.value)}
-                        className="w-full p-3 bg-brand-dark text-brand-light border border-gray-600 rounded-md focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition"
-                        title={selectedAlgorithmInfo?.description}>
-                        {filteredAlgorithms.map((option: any) => (<option key={option.value} value={option.value}>{option.label}</option>))}
-                    </select>
+                    <div className="relative">
+                        <select id="algorithm-select" value={selectedAlgorithm} onChange={(e) => setSelectedAlgorithm(e.target.value)}
+                            className="w-full p-3 bg-brand-dark text-brand-light border border-gray-600 rounded-md focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition cursor-pointer">
+                            {filteredAlgorithms.map((option: any) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="absolute -bottom-6 left-0 text-xs text-gray-500">
+                            Hover over options for details
+                        </div>
+                    </div>
+
+                    {/* Add tooltip for selected algorithm */}
+                    {selectedAlgorithmInfo && (
+                        <div className="mt-1">
+                            <AlgorithmTooltip algorithm={selectedAlgorithmInfo}>
+                                <span className="text-sm text-gray-500 inline-block">
+                                    {selectedAlgorithmInfo.description}
+                                </span>
+                            </AlgorithmTooltip>
+                        </div>
+                    )}
                 </div>
                 {availableKeySizes && (
                     <div className="md:col-span-1">
