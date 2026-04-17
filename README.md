@@ -1,5 +1,79 @@
 # Cryptographic Key Generator
 
+> Secure, client-side cryptographic key generation. Generate RSA, ECC, PGP, and SSH keys directly in your browser. Zero data transmission. Open source.
+
+## Quick Start
+
+1. **Choose your intended usage** (Encryption, Signing, SSH, or PGP)
+2. **Select your algorithm** (pick from recommended options)
+3. **Click "Generate Key"** - keys appear instantly
+4. **Copy or download** in your preferred format
+
+[![CI Status](https://github.com/ZeroClue/cryptographic-key-generator/workflows/CI/badge.svg)](https://github.com/ZeroClue/cryptographic-key-generator/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/ZeroClue/cryptographic-key-generator?style=social)](https://github.com/ZeroClue/cryptographic-key-generator/stargazers)
+
+## What is this?
+
+This is a **client-side only** cryptographic key generator. All key generation happens in your browser using the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) and [OpenPGP.js](https://openpgpjs.org/).
+
+**What this means:**
+- ✅ Your keys never leave your browser
+- ✅ No server to trust or compromise
+- ✅ Works offline after first load
+- ✅ Open source - audit the code yourself
+
+## Algorithm Comparison
+
+| Algorithm | Key Size | Speed | Security | Best For |
+|-----------|----------|-------|----------|----------|
+| **RSA-2048** | 2048-bit | Slow | Proven | General encryption, certificates |
+| **RSA-4096** | 4096-bit | Slower | Future-proof | High-security applications |
+| **ECDSA P-256** | 256-bit | Fast | Strong | Certificates, digital signatures |
+| **Ed25519** | 256-bit | Fastest | Modern | SSH keys, modern apps |
+| **X25519** | 256-bit | Fastest | Modern | Key exchange |
+| **AES-256-GCM** | 256-bit | Fastest | Strong | File encryption, data at rest |
+
+## Use Cases
+
+### SSH Keys
+- **Server access:** Authenticate to Linux/Unix servers
+- **Git hosting:** Add SSH keys to GitHub/GitLab
+- **Automation:** Enable passwordless script execution
+
+### PGP Keys
+- **Email encryption:** Send encrypted emails
+- **File signing:** Prove authorship of documents
+- **Identity:** Establish your cryptographic identity
+
+### RSA/ECC Keys
+- **TLS certificates:** Generate CSR for HTTPS
+- **Document signing:** Sign PDFs, code, data
+- **Authentication:** OAuth tokens, JWT signing
+
+## Code Examples
+
+### Generate RSA-4096 Key Pair
+
+```bash
+# Using the tool
+1. Visit https://zeroclue.github.io/cryptographic-key-generator
+2. Select "Encryption & Signing"
+3. Choose "RSA-OAEP-SHA-256-4096"
+4. Click "Generate Key"
+5. Copy keys to clipboard
+```
+
+### Integrate with Your App
+
+```javascript
+// Coming soon: API access
+// For now, embed the tool in your site:
+<iframe src="https://zeroclue.github.io/cryptographic-key-generator/embed/rsa"></iframe>
+```
+
+---
+
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](https://zeroclue.github.io/cryptographic-key-generator)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-blue)](https://zeroclue.github.io/cryptographic-key-generator)
 [![Deployment Status](https://img.shields.io/github/actions/deployment/status/ZeroClue/cryptographic-key-generator/pages?label=Deploy)](https://github.com/ZeroClue/cryptographic-key-generator/actions)
