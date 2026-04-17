@@ -535,15 +535,16 @@ const initialKeySize = initialKeySizesForAlgorithm ? initialKeySizesForAlgorithm
 
 interface KeyGeneratorProps {
     onShareKey: (key: string, target: string, properties: KeyProperties) => void;
+    selectedAlgorithm?: string;
 }
 
-const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey }) => {
+const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorithm: propSelectedAlgorithm }) => {
   // State for mode
   const [mode, setMode] = useState<'generate' | 'inspect'>('generate');
 
   // State for Generation
   const [selectedUsage, setSelectedUsage] = useState<string>(initialUsage);
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>(initialAlgorithm);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>(propSelectedAlgorithm || initialAlgorithm);
   const [selectedKeySize, setSelectedKeySize] = useState<string>(initialKeySize);
   const [generationResult, setGenerationResult] = useState<KeyGenerationResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
