@@ -6,14 +6,19 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: './tests/setup.ts',
-    include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'src/**/*.spec.ts', 'src/**/*.spec.tsx'],
-    exclude: ['tests/**', 'tests-examples/**'],
+    setupFiles: ['./tests/vitest-setup.ts', './tests/setup.ts'],
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'src/**/*.spec.ts', 'src/**/*.spec.tsx', 'tests/**/*.spec.ts', 'tests/**/*.test.ts'],
+    exclude: ['tests-examples/**', 'dist/**', 'tests/pgp-key-generation.spec.ts', 'tests/ssh-key-generation.spec.ts', 'tests/example.spec.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       include: ['src/**/*.ts', 'src/**/*.tsx'],
       exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
+    },
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
     },
   },
   resolve: {
