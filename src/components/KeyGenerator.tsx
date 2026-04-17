@@ -2,19 +2,19 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import zxcvbn from 'zxcvbn';
 import type { AlgorithmOption, KeyGenerationResult, KeyProperties } from '../types';
 import { ALGORITHM_OPTIONS, USAGE_DESCRIPTIONS, KEY_SIZE_OPTIONS, KEY_SIZE_DESCRIPTIONS, USAGE_DEFINITIONS, TABS } from '../constants';
+import { generateKey } from '../services/crypto/generators';
 import {
-  generateKey,
   exportPublicKeyPem,
   exportPrivateKeyPem,
   exportSymmetricKey,
+  exportSymmetricKeyHex,
   exportPublicKeyJwk,
   exportPrivateKeyJwk,
-  exportSymmetricKeyHex,
+  exportSshPublicKey,
   exportPrivateKeyOpenSsh,
-  exportPrivateKeyPutty,
-  importAndInspectKey,
-  inspectKey,
-} from '../services/cryptoService';
+  exportPrivateKeyPutty
+} from '../services/crypto/exporters';
+import { importAndInspectKey, inspectKey } from '../services/crypto/importers';
 
 interface ZxcvbnResult {
   score: 0 | 1 | 2 | 3 | 4;
