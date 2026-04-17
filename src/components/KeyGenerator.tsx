@@ -15,6 +15,8 @@ import {
   exportPrivateKeyPutty
 } from '../services/crypto/exporters';
 import { importAndInspectKey, inspectKey } from '../services/crypto/importers';
+import KeyOutputSkeleton from './Loading/KeyOutputSkeleton';
+import GenerationProgress from './Loading/GenerationProgress';
 
 interface ZxcvbnResult {
   score: 0 | 1 | 2 | 3 | 4;
@@ -280,10 +282,7 @@ const KeyOutput: React.FC<{ title: string; value: string; isLoading: boolean; pl
             <h2 className="text-lg font-semibold text-gray-200 mb-2">{title}</h2>
             <div className="relative">
                 {isLoading && (
-                    <div className="w-full p-4 flex items-center justify-center bg-brand-dark rounded-md shadow-inner min-h-[12rem] border border-gray-700 text-gray-400">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        <span>Generating...</span>
-                    </div>
+                    <KeyOutputSkeleton title={title} />
                 )}
                 {error && !isLoading && (
                     <div className="w-full p-4 flex items-center justify-center bg-brand-dark rounded-md shadow-inner min-h-[12rem] border border-red-500/30 text-red-400 font-sans text-center">
@@ -503,14 +502,19 @@ const KeyDisplay: React.FC<any> = ({
     isPgp
 }) => (
     <div className="space-y-6">
-        {isAsymmetricMode ? (
+        {isPgp && isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <KeyOutput 
-                    title={isSsh ? "Public Key (SSH Format)" : isPgp ? "Public Key (PGP)" : `Public Key (${asymmetricExportFormat.toUpperCase()})`} 
-                    value={publicKeyOutput} 
-                    isLoading={isLoading} 
-                    error={error} 
-                    placeholder="Your public key will appear here." 
+                <GenerationProgress message="Generating PGP keypair..." percentage={undefined} />
+                <GenerationProgress message="Generating PGP keypair..." percentage={undefined} />
+            </div>
+        ) : isAsymmetricMode ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <KeyOutput
+                    title={isSsh ? "Public Key (SSH Format)" : isPgp ? "Public Key (PGP)" : `Public Key (${asymmetricExportFormat.toUpperCase()})`}
+                    value={publicKeyOutput}
+                    isLoading={isLoading}
+                    error={error}
+                    placeholder="Your public key will appear here."
                 />
                 <KeyOutput title={isSsh ? "Private Key" : isPgp ? "Private Key (PGP)" : `Private Key (${asymmetricExportFormat.toUpperCase()})`} value={privateKeyOutput} isLoading={isLoading} error={error} placeholder="Your private key will appear here." />
             </div>
