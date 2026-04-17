@@ -4,10 +4,8 @@ import type { AlgorithmOption, PgpOptions } from '@/types';
 
 // Mock openpgp module
 vi.mock('openpgp', () => ({
-  default: {
-    generateKey: vi.fn(),
-    readKey: vi.fn(),
-  },
+  generateKey: vi.fn(),
+  readKey: vi.fn(),
 }));
 
 // Mock converters
@@ -675,7 +673,7 @@ describe('generators', () => {
     it('should throw error for unsupported SSH key type', async () => {
       const algorithm: AlgorithmOption = 'SSH-INVALID-2048' as AlgorithmOption;
 
-      await expect(generateKey(algorithm)).rejects.toThrow('Unsupported algorithm');
+      await expect(generateKey(algorithm)).rejects.toThrow('Unsupported SSH key type');
     });
   });
 
@@ -784,7 +782,7 @@ describe('generators', () => {
       mockSubtle.generateKey.mockResolvedValue(mockKeyPair);
 
       const { exportSshPublicKey } = await import('@/services/crypto/exporters');
-      const sshKey = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC... user@hostname';
+      const sshKey = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC user@hostname';
       (exportSshPublicKey as any).mockResolvedValue(sshKey);
 
       const result = await generateKey(algorithm);

@@ -1,18 +1,37 @@
 // Polyfill btoa and atob for jsdom environment
-if (typeof globalThis.btoa !== 'function') {
-  globalThis.btoa = (str: string) => Buffer.from(str, 'binary').toString('base64');
-}
+// This needs to be set up before any tests run
 
-if (typeof globalThis.atob !== 'function') {
-  globalThis.atob = (b64: string) => Buffer.from(b64, 'base64').toString('binary');
-}
+const btoaPolyfill = (str: string): string => {
+  return Buffer.from(str, 'binary').toString('base64');
+};
 
-// Add to window for jsdom environment
-if (typeof window !== 'undefined') {
-  if (typeof (window as any).btoa !== 'function') {
-    (window as any).btoa = globalThis.btoa;
+const atobPolyfill = (b64: string): string => {
+  return Buffer.from(b64, 'base64').toString('binary');
+};
+
+// Set up polyfills that will work across all contexts
+const setupPolyfills = () => {
+  // Set up on global scope (Node.js environment)
+  if (typeof global !== 'undefined') {
+    (global as any).btoa = btoaPolyfill;
+    (global as any).atob = atobPolyfill;
   }
-  if (typeof (window as any).atob !== 'function') {
-    (window as any).atob = globalThis.atob;
+
+  // Set up on globalThis
+  if (typeof globalThis !== 'undefined') {
+    (globalThis as any).btoa = btoaPolyfill;
+    (globalThis as any).atob = atobPolyfill;
   }
-}
+
+  // Set up on window (jsdom environment)
+  if (typeof window !== 'undefined') {
+    (window as any).btoa = btoaPolyfill;
+    (window as any).atob = atobPolyfill;
+  }
+};
+
+// Run polyfill setup immediately
+setupPolyfills();
+
+// Export for use in other setup files if needed
+export { setupPolyfills };

@@ -20,6 +20,11 @@ export default defineConfig({
         singleThread: true,
       },
     },
+    environmentOptions: {
+      jsdom: {
+        resources: 'usable',
+      },
+    },
   },
   resolve: {
     alias: {

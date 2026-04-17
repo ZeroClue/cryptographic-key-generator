@@ -6,11 +6,13 @@ import {
 } from '@/services/crypto/importers';
 
 // Mock openpgp module
-vi.mock('openpgp', () => ({
-  default: {
-    readKey: vi.fn(),
-  },
-}));
+vi.mock('openpgp', () => {
+  const readKey = vi.fn();
+  return {
+    readKey,
+    default: { readKey },
+  };
+});
 
 describe('importers', () => {
   let mockSubtle: any;
@@ -21,7 +23,12 @@ describe('importers', () => {
       importKey: vi.fn(),
       exportKey: vi.fn(),
     };
+
+    // Preserve existing window properties (like btoa/atob polyfills)
+    const existingWindow = typeof window !== 'undefined' ? { ...window } : {};
+
     vi.stubGlobal('window', {
+      ...existingWindow,
       crypto: {
         subtle: mockSubtle,
       },
@@ -39,7 +46,7 @@ describe('importers', () => {
           isPrivate: vi.fn(() => false),
           getAlgorithmInfo: vi.fn(() => ({ algorithm: 'RSA', bits: 2048 })),
         };
-        (openpgp.default.readKey as any).mockResolvedValue(pgpKey);
+        (openpgp.readKey as any).mockResolvedValue(pgpKey);
 
         const result = await importKey('-----BEGIN PGP PUBLIC KEY-----\ntest\n-----END PGP PUBLIC KEY-----');
         expect(result).toBe(pgpKey);
@@ -51,7 +58,7 @@ describe('importers', () => {
           isPrivate: vi.fn(() => true),
           getAlgorithmInfo: vi.fn(() => ({ algorithm: 'RSA', bits: 2048 })),
         };
-        (openpgp.default.readKey as any).mockResolvedValue(pgpKey);
+        (openpgp.readKey as any).mockResolvedValue(pgpKey);
 
         const result = await importKey('-----BEGIN PGP PRIVATE KEY-----\ntest\n-----END PGP PRIVATE KEY-----');
         expect(result).toBe(pgpKey);

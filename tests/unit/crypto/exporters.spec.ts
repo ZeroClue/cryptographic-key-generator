@@ -22,7 +22,12 @@ describe('exporters', () => {
       importKey: vi.fn(),
       sign: vi.fn(),
     };
+
+    // Preserve existing window properties (like btoa/atob polyfills)
+    const existingWindow = typeof window !== 'undefined' ? { ...window } : {};
+
     vi.stubGlobal('window', {
+      ...existingWindow,
       crypto: {
         subtle: mockSubtle,
         getRandomValues: vi.fn((arr: Uint8Array) => {

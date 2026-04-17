@@ -138,7 +138,7 @@ export async function generateKey(algorithm: AlgorithmOption, pgpOptions?: PgpOp
     }
 
     case 'HMAC': {
-      const hash = `SHA-${parts[1]}`;
+      const hash = `${parts[1]}-${parts[2]}`; // e.g., SHA-256, SHA-384, SHA-512
       const key = await crypto.generateKey(
         {
           name: 'HMAC',
