@@ -20,6 +20,7 @@ import GenerationProgress from './Loading/GenerationProgress';
 import AlgorithmTooltip from './Tooltips/AlgorithmTooltip';
 import KeyHistoryDropdown from './KeyHistory/KeyHistoryDropdown';
 import CopyButton from './CopyButton';
+import ErrorMessage, { KeyGenerationError, KeyImportError } from './ErrorMessage';
 import { addToKeyHistory } from '../utils/keyHistory';
 
 interface ZxcvbnResult {
@@ -292,13 +293,16 @@ const KeyOutput: React.FC<KeyOutputProps> = React.memo(({
                     <KeyOutputSkeleton title={title} />
                 )}
                 {error && !isLoading && (
-                    <div className="w-full p-4 flex items-center justify-center bg-brand-dark rounded-md shadow-inner min-h-[12rem] border border-red-500/30 text-red-400 font-sans text-center">
-                        <div>
-                            <ErrorIcon className="w-8 h-8 mx-auto mb-2" />
-                            <span>Key generation failed.</span>
-                            <p className="text-xs text-gray-500 mt-1">Review options or try again.</p>
-                        </div>
-                    </div>
+                    <KeyGenerationError
+                        message="Key generation failed"
+                        error={error}
+                        suggestions={[
+                            "Check that all required fields are filled correctly",
+                            "Verify you have selected a compatible algorithm and key size",
+                            "Try using a smaller key size if the operation is timing out",
+                            "Ensure your browser supports the selected cryptographic algorithm"
+                        ]}
+                    />
                 )}
                 {!isLoading && !error && (
                     <>
@@ -928,9 +932,16 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
             
             <div className="pt-6 border-t border-gray-700 space-y-6">
                 {error && (
-                    <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-300 font-sans" role="alert">
-                        <div className="flex items-start gap-3"><ErrorIcon className="h-5 w-5 mt-0.5 flex-shrink-0 text-red-400" /><div><h3 className="font-semibold text-red-200">An Error Occurred</h3><p className="text-sm">{error}</p></div></div>
-                    </div>
+                    <KeyGenerationError
+                        message="Unable to generate key"
+                        error={error}
+                        suggestions={[
+                            "Verify your internet connection is stable",
+                            "Try refreshing the page and selecting different options",
+                            "Check that your browser supports Web Crypto API",
+                            "Use a smaller key size if the operation is taking too long"
+                        ]}
+                    />
                 )}
                 
                 <KeyDisplay
@@ -1005,9 +1016,16 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
                 </button>
             </div>
             {importError && (
-                <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-300 font-sans" role="alert">
-                    <div className="flex items-start gap-3"><ErrorIcon className="h-5 w-5 mt-0.5 flex-shrink-0 text-red-400" /><div><h3 className="font-semibold text-red-200">An Error Occurred</h3><p className="text-sm">{importError}</p></div></div>
-                </div>
+                <KeyImportError
+                    message="Unable to inspect key"
+                    error={importError}
+                    suggestions={[
+                        "Check that you have pasted the complete key material",
+                        "Ensure the key is in a supported format (PEM, JWK, Base64, Hex)",
+                        "Verify there are no extra spaces or characters at the beginning/end",
+                        "Try removing PEM headers (-----BEGIN/-----END) for raw key data"
+                    ]}
+                />
             )}
             {importedKeyProps && (
                 <div className="p-4 bg-brand-dark rounded-lg border border-gray-700 space-y-4">
