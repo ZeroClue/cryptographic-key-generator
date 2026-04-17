@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "playwright test",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "test:unit": "vitest"
   },
   "dependencies": {
     "openpgp": "^6.2.1",
@@ -18,6 +19,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^16.0.0",
     "@types/node": "^22.14.0",
     "@types/openpgp": "^4.4.22",
     "@types/react": "^19.1.12",
@@ -25,10 +28,12 @@
     "@types/zxcvbn": "^4.4.5",
     "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "^10.4.21",
+    "jsdom": "^24.0.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.8.2",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "vitest": "^2.0.0"
   },
   "description": "A comprehensive cryptographic key generator supporting RSA, DSA, ECDSA, Ed25519, SSH, and PGP keys with advanced features",
   "homepage": "https://zeroclue.github.io/cryptographic-key-generator",
