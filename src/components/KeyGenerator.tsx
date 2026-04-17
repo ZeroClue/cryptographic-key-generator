@@ -645,9 +645,17 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey }) => {
   const downloadFile = (filename: string, content: string, mimeType: string = 'application/octet-stream') => {
     const element = document.createElement('a');
     const file = new Blob([content], { type: mimeType });
-    element.href = URL.createObjectURL(file);
+    const objectUrl = URL.createObjectURL(file);
+    element.href = objectUrl;
     element.download = filename;
-    document.body.appendChild(element); element.click(); document.body.removeChild(element); URL.revokeObjectURL(element.href);
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+
+    // Revoke the object URL after a short delay to allow download to start
+    setTimeout(() => {
+      URL.revokeObjectURL(objectUrl);
+    }, 100);
   };
 
   const handleGenerateKey = useCallback(async () => {
