@@ -1,6 +1,7 @@
 // vite.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -10,8 +11,17 @@ export default defineConfig({
     assetsDir: 'assets',
     sourcemap: true,
     rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        why: resolve(__dirname, 'src/pages/Why.tsx'),
+        about: resolve(__dirname, 'src/pages/About.tsx'),
+      },
       output: {
-        manualChunks(id) {
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name].[ext]'
+      },
+      manualChunks(id) {
           // Vendor chunks - React ecosystem
           if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
             return 'vendor-react';
@@ -74,7 +84,6 @@ export default defineConfig({
               return 'component-shared';
             }
           }
-        }
       }
     }
   }
