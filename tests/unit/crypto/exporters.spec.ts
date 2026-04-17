@@ -100,7 +100,7 @@ describe('exporters', () => {
 
       expect(result).toContain('-----BEGIN PRIVATE KEY-----');
       expect(result).toContain('-----END PRIVATE KEY-----');
-      expect(result).toContain('BwgJCQo=');
+      expect(result).toContain('BgcICQo='); // Base64 of [6, 7, 8, 9, 10]
     });
 
     it('should use pkcs8 format for private keys', async () => {
@@ -136,7 +136,7 @@ describe('exporters', () => {
 
       const result = await exportSymmetricKey(mockKey);
 
-      expect(result).toBe('Cw0ODf8='); // Base64 of [11, 12, 13, 14, 15]
+      expect(result).toBe('CwwNDg8='); // Base64 of [11, 12, 13, 14, 15]
     });
 
     it('should use raw format for symmetric keys', async () => {
@@ -348,7 +348,8 @@ describe('exporters', () => {
 
       expect(result).toContain('-----BEGIN OPENSSH PRIVATE KEY-----');
       expect(result).toContain('-----END OPENSSH PRIVATE KEY-----');
-      expect(result).toContain('openssh-key-v1');
+      // The magic string "openssh-key-v1\0" is embedded as binary and base64 encoded
+      expect(result).toContain('b3BlbnNzaC1rZXktdjE'); // base64 of "openssh-key-v1"
     });
 
     it('should export ECDSA private key to OpenSSH format', async () => {
@@ -366,7 +367,8 @@ describe('exporters', () => {
 
       expect(result).toContain('-----BEGIN OPENSSH PRIVATE KEY-----');
       expect(result).toContain('-----END OPENSSH PRIVATE KEY-----');
-      expect(result).toContain('openssh-key-v1');
+      // The magic string "openssh-key-v1\0" is embedded as binary and base64 encoded
+      expect(result).toContain('b3BlbnNzaC1rZXktdjE'); // base64 of "openssh-key-v1"
     });
 
     it('should throw error for unsupported key type', async () => {
@@ -395,7 +397,8 @@ describe('exporters', () => {
       const result = await exportPrivateKeyOpenSsh(mockKey, 'custom@example.com');
 
       // The comment is embedded in the binary data, so we just check it doesn't throw
-      expect(result).toContain('openssh-key-v1');
+      // and the format is valid (contains the magic string)
+      expect(result).toContain('b3BlbnNzaC1rZXktdjE'); // base64 of "openssh-key-v1"
     });
   });
 
@@ -518,7 +521,8 @@ describe('exporters', () => {
       const result = await exportPrivateKeyPutty(mockKey);
 
       expect(result).toContain('Private-MAC: 12345678');
-      expect(mockSubtle.digest).toHaveBeenCalledWith('SHA-1', expect.any(Uint8Array));
+      // The digest is called with the MAC key string "putty-private-key-file-mac-key"
+      expect(mockSubtle.digest).toHaveBeenCalledWith('SHA-1', new TextEncoder().encode('putty-private-key-file-mac-key'));
     });
   });
 
@@ -574,7 +578,8 @@ describe('exporters', () => {
 
       const openssh = await exportPrivateKeyOpenSsh(mockKey);
 
-      expect(openssh).toContain('openssh-key-v1');
+      // The magic string "openssh-key-v1\0" is embedded as binary and base64 encoded
+      expect(openssh).toContain('b3BlbnNzaC1rZXktdjE'); // base64 of "openssh-key-v1"
       expect(openssh).toContain('-----BEGIN OPENSSH PRIVATE KEY-----');
       expect(openssh).toContain('-----END OPENSSH PRIVATE KEY-----');
     });
