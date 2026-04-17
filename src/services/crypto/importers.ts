@@ -1,4 +1,3 @@
-import * as openpgp from 'openpgp';
 import type { KeyProperties } from '../../types';
 import { pemToBase64, base64ToArrayBuffer, hexToArrayBuffer, base64UrlToUint8Array } from './converters';
 
@@ -123,7 +122,10 @@ export async function importKey(keyData: string): Promise<CryptoKey | any> {
   keyData = keyData.trim();
 
   if (keyData.startsWith('-----BEGIN PGP')) {
-    try { return await openpgp.readKey({ armoredKey: keyData }); } catch (e) { /* Fall through */ }
+    try {
+      const openpgp = await import('openpgp');
+      return await openpgp.readKey({ armoredKey: keyData });
+    } catch (e) { /* Fall through */ }
   }
 
   try {
@@ -169,6 +171,7 @@ export async function importAndInspectKey(keyData: string): Promise<{ key: Crypt
   // Try importing as PGP
   if (keyData.startsWith('-----BEGIN PGP')) {
     try {
+      const openpgp = await import('openpgp');
       const key = await openpgp.readKey({ armoredKey: keyData });
       const isPrivate = key.isPrivate();
       const algoInfo = key.getAlgorithmInfo();
