@@ -374,26 +374,19 @@ const KeyGenerationForm: React.FC<any> = ({
         )}
 
         <div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                 <div className={availableKeySizes ? 'md:col-span-1' : 'md:col-span-2'}>
                     <label htmlFor="algorithm-select" className="block text-sm font-medium text-gray-300 mb-2">Choose Algorithm</label>
-                    <div className="relative">
-                        <select id="algorithm-select" value={selectedAlgorithm} onChange={(e) => setSelectedAlgorithm(e.target.value)}
-                            className="w-full p-3 bg-brand-dark text-brand-light border border-gray-600 rounded-md focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition cursor-pointer">
-                            {filteredAlgorithms.map((option: any) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                        <div className="absolute -bottom-6 left-0 text-xs text-gray-500">
-                            Hover over options for details
-                        </div>
-                    </div>
-
-                    {/* Add tooltip for selected algorithm */}
+                    <select id="algorithm-select" value={selectedAlgorithm} onChange={(e) => setSelectedAlgorithm(e.target.value)}
+                        className="w-full p-3 bg-brand-dark text-brand-light border border-gray-600 rounded-md focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition cursor-pointer mb-3">
+                        {filteredAlgorithms.map((option: any) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </select>
                     {selectedAlgorithmInfo && (
-                        <div className="mt-1">
+                        <div className="mb-2">
                             <AlgorithmTooltip algorithm={selectedAlgorithmInfo}>
                                 <span className="text-sm text-gray-500 inline-block">
                                     {selectedAlgorithmInfo.description}
@@ -406,27 +399,21 @@ const KeyGenerationForm: React.FC<any> = ({
                     <div className="md:col-span-1">
                         <label htmlFor="keysize-select" className="block text-sm font-medium text-gray-300 mb-2">Key Size / Curve</label>
                         <select id="keysize-select" value={selectedKeySize} onChange={(e) => setSelectedKeySize(e.target.value)}
-                            className="w-full p-3 bg-brand-dark text-brand-light border border-gray-600 rounded-md focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition">
+                            className="w-full p-3 bg-brand-dark text-brand-light border border-gray-600 rounded-md focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition mb-3">
                             {availableKeySizes.map((size: any) => (<option key={size.value} value={size.value} title={KEY_SIZE_DESCRIPTIONS[size.value]}>{size.label}</option>))}
                         </select>
+                        {selectedKeySize && KEY_SIZE_DESCRIPTIONS[selectedKeySize] && (
+                            <p className="text-xs text-gray-500 mt-2">{KEY_SIZE_DESCRIPTIONS[selectedKeySize]}</p>
+                        )}
                     </div>
                 )}
                 <div className={availableKeySizes ? "md:col-span-1" : "md:col-span-1"}>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">&nbsp;</label>
                     <button onClick={handleGenerateKey} disabled={isLoading}
                         className="w-full p-3 bg-brand-primary text-brand-dark font-bold rounded-md hover:bg-teal-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-brand-secondary focus:ring-brand-primary transition duration-200 ease-in-out disabled:bg-gray-500 disabled:cursor-not-allowed">
                         {isLoading ? 'Generating...' : 'Generate Key'}
                     </button>
                 </div>
-            </div>
-            <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-x-6 text-xs text-gray-400">
-                <div className="min-h-[3rem] py-1">
-                    {selectedAlgorithmInfo?.description && (<p><span className="font-semibold text-gray-300">Algorithm: </span>{selectedAlgorithmInfo.description}</p>)}
-                </div>
-                {availableKeySizes && (
-                    <div className="min-h-[3rem] py-1">
-                        {selectedKeySize && KEY_SIZE_DESCRIPTIONS[selectedKeySize] && (<p><span className="font-semibold text-gray-300">Key Size/Curve: </span>{KEY_SIZE_DESCRIPTIONS[selectedKeySize]}</p>)}
-                    </div>
-                )}
             </div>
         </div>
     </div>
@@ -637,6 +624,18 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
   const [selectedUsage, setSelectedUsage] = useState<string>(initialUsage);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>(propSelectedAlgorithm || initialAlgorithm);
   const [selectedKeySize, setSelectedKeySize] = useState<string>(initialKeySize);
+
+  // Sync selectedAlgorithm with prop changes (for quick-start cards)
+  useEffect(() => {
+    if (propSelectedAlgorithm && propSelectedAlgorithm !== selectedAlgorithm) {
+      setSelectedAlgorithm(propSelectedAlgorithm);
+      // Also update the usage if the algorithm belongs to a different group
+      const algorithmInfo = ALGORITHM_OPTIONS.find(opt => opt.value === propSelectedAlgorithm);
+      if (algorithmInfo && algorithmInfo.group !== selectedUsage) {
+        setSelectedUsage(algorithmInfo.group);
+      }
+    }
+  }, [propSelectedAlgorithm]);
   const [generationResult, setGenerationResult] = useState<KeyGenerationResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

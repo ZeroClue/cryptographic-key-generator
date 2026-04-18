@@ -84,6 +84,11 @@ const QuickStartCards: React.FC<{ setActiveTab: (tab: string) => void; onAlgorit
 
 // Educational Resources Component
 const EducationalResources: React.FC = () => {
+  // These pages don't exist yet, so this section is disabled
+  // Once the Why page and other documentation are created, uncomment and update hrefs
+  return null;
+
+  /* TODO: Uncomment when educational pages are created
   const resources = [
     {
       title: 'Why Cryptography Matters',
@@ -119,6 +124,7 @@ const EducationalResources: React.FC = () => {
       </div>
     </div>
   );
+  */
 };
 
 const App: React.FC = () => {
