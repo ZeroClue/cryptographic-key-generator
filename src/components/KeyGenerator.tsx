@@ -320,6 +320,9 @@ const KeyOutput: React.FC<KeyOutputProps> = React.memo(({
                                     variant="ghost"
                                     className="flex items-center gap-2 px-3 py-1.5"
                                     ariaLabel="Copy key to clipboard"
+                                    onCopy={() => {
+                                        // Optional: Add specific copy feedback here
+                                    }}
                                 />
                             </div>
                         )}
@@ -345,6 +348,9 @@ const CommandLineEquivalent: React.FC<{ command: string | null }> = React.memo((
                     className="absolute top-2 right-2"
                     ariaLabel="Copy command"
                     showTooltip
+                    onCopy={() => {
+                        // Optional: Add specific copy feedback here
+                    }}
                 />
                 <code className="pr-10 block whitespace-pre-wrap break-all">{command}</code>
             </div>

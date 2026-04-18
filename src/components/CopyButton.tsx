@@ -9,6 +9,7 @@ interface CopyButtonProps {
   showTooltip?: boolean;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'ghost' | 'primary';
+  onCopy?: () => void;
 }
 
 const CopyButton: React.FC<CopyButtonProps> = ({
@@ -19,7 +20,8 @@ const CopyButton: React.FC<CopyButtonProps> = ({
   tooltip = 'Copied!',
   showTooltip = false,
   size = 'md',
-  variant = 'default'
+  variant = 'default',
+  onCopy
 }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [showTooltipState, setShowTooltipState] = useState(false);
@@ -43,7 +45,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [text]);
+  }, [text, onCopy]);
 
   const handleCopy = () => {
     if (isCopied || !text) return;
@@ -51,6 +53,11 @@ const CopyButton: React.FC<CopyButtonProps> = ({
     navigator.clipboard.writeText(text).then(() => {
       setIsCopied(true);
       setShowTooltipState(showTooltip);
+
+      // Call the onCopy callback if provided
+      if (onCopy) {
+        onCopy();
+      }
 
       // Clear any existing timeout before setting a new one
       if (timeoutRef.current) {
