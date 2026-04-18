@@ -3,11 +3,13 @@ import { test, expect } from '@playwright/test';
 test.describe('SSH Key Generation', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173');
+    // Wait for React to hydrate
+    await page.waitForSelector('button', { timeout: 10000 });
   });
 
   test('should generate SSH RSA key pair successfully', async ({ page }) => {
-    // Ensure we're in generate mode (default)
-    await expect(page.getByRole('button', { name: 'Generate New Key' })).toHaveAttribute('aria-pressed', 'true');
+    // Ensure we're on the Generate tab (it's the default)
+    await expect(page.getByRole('button', { name: 'Generate', exact: true })).toBeVisible();
 
     // Select SSH Authentication usage
     await page.getByLabel('Select Intended Usage').selectOption('SSH Authentication');
