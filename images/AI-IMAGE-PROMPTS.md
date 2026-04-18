@@ -143,11 +143,74 @@ After generating, test at:
 3. **Leonardo AI** - leonardo.ai (has cybersecurity models)
 4. **Ideogram** - ideogram.ai (good for text in images)
 5. **Stable Diffusion XL** - via various interfaces
+6. **Qwen Image AI** (Alibaba Cloud) - qwenlm.com
+7. **ZAI GLM / ZImage** (zhipu.ai) - zhipu.ai
 
 **Recommended workflow:**
 1. Start with Midjourney (best results for tech)
 2. If not satisfied, try DALL-E 3
 3. Use the generated image as base, fine-tune in Canva if needed
+
+---
+
+### Option 6: Qwen Image AI Prompt (Alibaba Cloud)
+
+```
+A professional social media preview image for a cryptographic key generator website.
+
+Image specifications:
+- Size: 1200x630 pixels (landscape)
+- Background color: #222831 (dark blue/charcoal)
+- Accent color: #00ADB5 (cyan/teal)
+
+Content layout (centered, top to bottom):
+1. Large bold title: "Cryptographic Key Generator" (cyan #00ADB5, 48-60px, sans-serif bold)
+2. Tagline: "Secure. Client-Side. Open Source." (light gray #A0A0A0, 24-30px, sans-serif medium)
+3. Three icons in horizontal row: 🔐 🔑 ⚡ (lock, key, lightning)
+4. Footer text: "crypto-gen.kern.web.za" (medium gray #808080, 16-18px, sans-serif)
+
+Style: Modern cybersecurity technology, dark theme, professional, trustworthy, clean minimal design. High contrast, tech-focused.
+
+Use: Social media sharing preview (Twitter, LinkedIn, Facebook, OpenGraph)
+```
+
+### Option 7: ZAI GLM / ZImage Prompt (zhipu.ai)
+
+```
+专业网站社交媒体预览图，1200x630像素，横版。
+
+主题：密码学密钥生成器 - 安全的客户端密钥生成工具。
+
+设计要求：
+- 背景色：深蓝/炭灰色 (#222831)
+- 标题（居中，顶部）：'Cryptographic Key Generator'，青色 (#00ADB5)，粗体，48-60px
+- 副标题（居中，标题下方）：'Secure. Client-Side. Open Source.'，浅灰色 (#A0A0A0)，中等字重，24-30px
+- 图标（居中，中间行）：🔐 🔑 ⚡ (锁，钥匙，闪电)
+- 页脚URL（居中，底部）：'crypto-gen.kern.web.za'，中灰色 (#808080)，16-18px
+
+风格：现代网络安全技术，深色主题，专业，值得信赖，简洁设计。高对比度，科技感。
+
+用途：社交媒体分享预览 (Twitter, LinkedIn, Facebook, OpenGraph)
+```
+
+### Option 8: ZImage (Alternative ZAI Format)
+
+```
+Create a professional social preview image for a cryptographic key generator.
+
+Technical specifications:
+- Resolution: 1200x630 pixels
+- Background: #222831 (dark blue)
+- Accent color: #00ADB5 (cyan/teal)
+
+Design layout (centered):
+1. Header: "Cryptographic Key Generator" (cyan #00ADB5, bold, 54px)
+2. Subtitle: "Secure. Client-Side. Open Source." (gray #A0A0A0, 28px)
+3. Icons: 🔐 🔑 ⚡ (centered, 48px each)
+4. Footer: "crypto-gen.kern.web.za" (gray #8080, 18px)
+
+Style: Cybersecurity, cryptography, modern tech, dark mode. Professional, secure, minimalist.
+```
 
 ---
 

@@ -23,7 +23,7 @@
 │  │    RSA   │  │    ECC   │  │    PGP   │                     │
 │  └──────────┘  └──────────┘  └──────────┘                     │
 │                                                             │
-│              cryptokeygen.com                               │
+│         crypto-gen.kern.web.za                             │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -58,7 +58,7 @@
 3. **Split Design:** Left side text/icons, right side app preview
 
 **URL/Footer:**
-- Text: "cryptokeygen.com"
+- Text: "crypto-gen.kern.web.za"
 - Style: Small, sans-serif
 - Color: Medium gray (#808080)
 - Size: Approximately 16-18px

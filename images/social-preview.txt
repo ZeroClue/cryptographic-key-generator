@@ -7,7 +7,7 @@ Design Requirements:
 - Title: "Cryptographic Key Generator" (large, bold)
 - Tagline: "Secure. Client-Side. Open Source."
 - Visual: Key icons (🔐, 🔑, ⚡) or app preview
-- URL: "cryptokeygen.com" at bottom
+- URL: "crypto-gen.kern.web.za" at bottom
 - Colors: Use brand colors from app (dark theme)
 - Font: Clean, readable sans-serif
 
