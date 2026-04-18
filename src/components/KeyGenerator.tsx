@@ -678,6 +678,7 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
   const [pgpFormErrors, setPgpFormErrors] = useState({ name: '', email: '', confirmPassphrase: '' });
   const [passphraseStrength, setPassphraseStrength] = useState<ZxcvbnResult | null>(null);
   const [commandLineEquivalent, setCommandLineEquivalent] = useState<string | null>(null);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
 
   // State for key display strings
   const [publicKeyOutput, setPublicKeyOutput] = useState('');
@@ -835,6 +836,10 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
       const result = await generateKey(fullAlgorithm as AlgorithmOption, pgpOptions);
       setGenerationResult(result);
       setCommandLineEquivalent(getCommandEquivalent(fullAlgorithm));
+
+      // Show success feedback
+      setShowSuccessToast(true);
+      setTimeout(() => setShowSuccessToast(false), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred during key generation.');
     } finally {
@@ -949,6 +954,16 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
   return (
     <div className="w-full mx-auto p-6 sm:p-8 bg-brand-secondary rounded-xl shadow-2xl space-y-8">
       <SecurityWarningModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirmExport} />
+      {showSuccessToast && (
+        <div className="fixed top-4 right-4 z-50 animate-fade-in">
+          <div className="bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="font-semibold">Key generated successfully!</span>
+          </div>
+        </div>
+      )}
       <header className="text-center">
         <h1 className="text-3xl sm:text-4xl font-bold text-brand-primary flex items-center justify-center gap-3"><KeyIcon className="w-8 h-8"/>Key Generation & Inspection</h1>
         <p className="mt-2 text-gray-400">A simple, secure, browser-based tool for all your key needs.</p>
