@@ -649,6 +649,9 @@ interface KeyGeneratorProps {
 }
 
 const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorithm: propSelectedAlgorithm }) => {
+  // Timeout ref for cleanup
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
   // State for mode
   const [mode, setMode] = useState<'generate' | 'inspect'>('generate');
 
@@ -717,6 +720,15 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
         }
     }
   }, [selectedUsage, filteredAlgorithms]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setGenerationResult(null);
@@ -839,7 +851,10 @@ const KeyGenerator: React.FC<KeyGeneratorProps> = ({ onShareKey, selectedAlgorit
 
       // Show success feedback
       setShowSuccessToast(true);
-      setTimeout(() => setShowSuccessToast(false), 3000);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => setShowSuccessToast(false), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred during key generation.');
     } finally {
