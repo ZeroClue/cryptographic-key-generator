@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import KeyGenerator from './components/KeyGenerator';
 import EncryptDecrypt from './components/EncryptDecrypt';
 import SignVerify from './components/SignVerify';
+import { ToastContainer } from './components/Toast/ToastContainer';
+import { useToast } from './hooks/useToast';
 import { TABS } from './constants';
 import type { SharedKeyInfo, KeyProperties } from './types';
 
@@ -128,6 +130,7 @@ const EducationalResources: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const { toasts, removeToast } = useToast();
   const [activeTab, setActiveTab] = useState<string>(TABS.GENERATE);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>('');
 
@@ -203,6 +206,9 @@ const App: React.FC = () => {
 
       {/* Educational Resources Section */}
       <EducationalResources />
+
+      {/* Toast Container */}
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 };
