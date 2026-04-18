@@ -27,7 +27,7 @@ export function useSeo({ title, description, path }: SeoProps) {
       ogUrl.setAttribute('property', 'og:url');
       document.head.appendChild(ogUrl);
     }
-    ogUrl.setAttribute('content', `https://zeroclue.github.io/cryptographic-key-generator${path}`);
+    ogUrl.setAttribute('content', `https://crypto-gen.kern.web.za${path}`);
 
     // Update canonical URL
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -36,6 +36,6 @@ export function useSeo({ title, description, path }: SeoProps) {
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', `https://zeroclue.github.io/cryptographic-key-generator${path}`);
+    canonical.setAttribute('href', `https://crypto-gen.kern.web.za${path}`);
   }, [title, description, path]);
 }
