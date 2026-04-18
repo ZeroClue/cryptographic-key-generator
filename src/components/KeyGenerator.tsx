@@ -80,6 +80,25 @@ const ArrowRightIcon: React.FC<{ className?: string }> = ({ className }) => (
 // ===================================================================================
 // HELPER FUNCTIONS
 // ===================================================================================
+const getProgressMessage = (algorithm: string): string => {
+    if (algorithm.includes('PGP')) {
+        return 'Generating PGP key pair...';
+    }
+    if (algorithm.includes('RSA')) {
+        return 'Generating RSA key pair (this may take a few seconds for larger keys)...';
+    }
+    if (algorithm.includes('ECDSA') || algorithm.includes('ECDH')) {
+        return 'Generating elliptic curve key pair...';
+    }
+    if (algorithm.includes('Ed25519') || algorithm.includes('X25519')) {
+        return 'Generating modern elliptic curve key...';
+    }
+    if (algorithm.includes('AES') || algorithm.includes('HMAC')) {
+        return 'Generating symmetric key...';
+    }
+    return 'Generating key...';
+};
+
 const getAlgorithmFamily = (alg: AlgorithmOption): string => {
     if (alg.startsWith('PGP')) return 'pgp';
     if (alg.startsWith('SSH')) return 'ssh';
@@ -543,66 +562,73 @@ const KeyDisplay: React.FC<KeyDisplayProps> = ({
     selectedAlgorithm,
     selectedKeySize,
     generationResult
-}) => (
-    <div className="space-y-6">
-        {isPgp && isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <GenerationProgress message="Generating PGP keypair..." percentage={undefined} algorithm={selectedAlgorithm} />
-                <GenerationProgress message="Generating PGP keypair..." percentage={undefined} algorithm={selectedAlgorithm} />
-            </div>
-        ) : isAsymmetricMode ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <KeyOutput
-                    title={isSsh ? "Public Key (SSH Format)" : isPgp ? "Public Key (PGP)" : `Public Key (${asymmetricExportFormat.toUpperCase()})`}
-                    value={publicKeyOutput}
-                    isLoading={isLoading}
-                    error={error}
-                    placeholder="Your public key will appear here."
-                    algorithm={selectedAlgorithm}
-                    properties={selectedAlgorithm && selectedKeySize ? {
-                        type: 'public',
-                        algorithm: isSsh ? 'SSH' : selectedAlgorithm,
-                        size: selectedKeySize,
-                        usages: ['encrypt'],
-                        extractable: true
-                    } : undefined}
-                    onCopyToHistory={onCopyToHistory}
-                />
-                <KeyOutput title={isSsh ? "Private Key" : isPgp ? "Private Key (PGP)" : `Private Key (${asymmetricExportFormat.toUpperCase()})`}
-                    value={privateKeyOutput}
-                    isLoading={isLoading}
-                    error={error}
-                    placeholder="Your private key will appear here."
-                    algorithm={selectedAlgorithm}
-                    properties={selectedAlgorithm && selectedKeySize ? {
-                        type: 'private',
-                        algorithm: isSsh ? 'SSH' : selectedAlgorithm,
-                        size: selectedKeySize,
-                        usages: ['sign'],
-                        extractable: true
-                    } : undefined}
-                    onCopyToHistory={onCopyToHistory}
-                />
-            </div>
-        ) : (
-            <KeyOutput title={isSymmetric ? `Generated Key (${symmetricExportFormat === 'hex' ? 'Hex' : 'Base64'})` : "Generated Key"}
-                    value={symmetricOutput}
-                    isLoading={isLoading}
-                    error={error}
-                    placeholder="Your generated key will appear here."
-                    algorithm={selectedAlgorithm}
-                    properties={selectedAlgorithm ? {
-                        type: 'symmetric',
-                        algorithm: selectedAlgorithm,
-                        size: 'N/A',
-                        usages: ['encrypt', 'decrypt'],
-                        extractable: true
-                    } : undefined}
-                    onCopyToHistory={onCopyToHistory}
-                />
-        )}
-    </div>
-);
+}) => {
+    // Build fullAlgorithm string for progress messages
+    const fullAlgorithm = selectedKeySize && selectedAlgorithm ?
+        `${selectedAlgorithm}-${selectedKeySize}` :
+        selectedAlgorithm || '';
+
+    return (
+        <div className="space-y-6">
+            {isPgp && isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <GenerationProgress message={getProgressMessage(fullAlgorithm)} percentage={undefined} algorithm={selectedAlgorithm} />
+                    <GenerationProgress message={getProgressMessage(fullAlgorithm)} percentage={undefined} algorithm={selectedAlgorithm} />
+                </div>
+            ) : isAsymmetricMode ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <KeyOutput
+                        title={isSsh ? "Public Key (SSH Format)" : isPgp ? "Public Key (PGP)" : `Public Key (${asymmetricExportFormat.toUpperCase()})`}
+                        value={publicKeyOutput}
+                        isLoading={isLoading}
+                        error={error}
+                        placeholder="Your public key will appear here."
+                        algorithm={selectedAlgorithm}
+                        properties={selectedAlgorithm && selectedKeySize ? {
+                            type: 'public',
+                            algorithm: isSsh ? 'SSH' : selectedAlgorithm,
+                            size: selectedKeySize,
+                            usages: ['encrypt'],
+                            extractable: true
+                        } : undefined}
+                        onCopyToHistory={onCopyToHistory}
+                    />
+                    <KeyOutput title={isSsh ? "Private Key" : isPgp ? "Private Key (PGP)" : `Private Key (${asymmetricExportFormat.toUpperCase()})`}
+                        value={privateKeyOutput}
+                        isLoading={isLoading}
+                        error={error}
+                        placeholder="Your private key will appear here."
+                        algorithm={selectedAlgorithm}
+                        properties={selectedAlgorithm && selectedKeySize ? {
+                            type: 'private',
+                            algorithm: isSsh ? 'SSH' : selectedAlgorithm,
+                            size: selectedKeySize,
+                            usages: ['sign'],
+                            extractable: true
+                        } : undefined}
+                        onCopyToHistory={onCopyToHistory}
+                    />
+                </div>
+            ) : (
+                <KeyOutput title={isSymmetric ? `Generated Key (${symmetricExportFormat === 'hex' ? 'Hex' : 'Base64'})` : "Generated Key"}
+                        value={symmetricOutput}
+                        isLoading={isLoading}
+                        error={error}
+                        placeholder="Your generated key will appear here."
+                        algorithm={selectedAlgorithm}
+                        properties={selectedAlgorithm ? {
+                            type: 'symmetric',
+                            algorithm: selectedAlgorithm,
+                            size: 'N/A',
+                            usages: ['encrypt', 'decrypt'],
+                            extractable: true
+                        } : undefined}
+                        onCopyToHistory={onCopyToHistory}
+                    />
+            )}
+        </div>
+    );
+};
 
 // Calculate initial state for the generator form once, outside the component.
 // This ensures the form is pre-filled on first load for one-click generation.
