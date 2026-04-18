@@ -3,9 +3,25 @@ import React from 'react';
 interface GenerationProgressProps {
     message?: string;
     percentage?: number;
+    algorithm?: string;
+    estimatedTime?: number;
 }
 
-const GenerationProgress: React.FC<GenerationProgressProps> = ({ message = "Generating key...", percentage }) => {
+const getTimeEstimate = (algorithm?: string): number => {
+    if (!algorithm) return 5;
+
+    if (algorithm.includes('AES')) return 1;
+    if (algorithm.includes('RSA')) return 3;
+    if (algorithm.includes('ECDSA') || algorithm.includes('ECDH')) return 2;
+    if (algorithm.includes('Ed25519') || algorithm.includes('X25519')) return 2;
+    if (algorithm.includes('PGP')) return 8;
+    if (algorithm.includes('curve25519')) return 5;
+
+    return 3; // default
+};
+
+const GenerationProgress: React.FC<GenerationProgressProps> = ({ message = "Generating key...", percentage, algorithm, estimatedTime }) => {
+    const estimate = estimatedTime ?? getTimeEstimate(algorithm);
     return (
         <div className="w-full p-6 flex flex-col items-center justify-center bg-brand-dark rounded-md shadow-inner border border-gray-700">
             {/* Spinner icon */}
@@ -18,6 +34,14 @@ const GenerationProgress: React.FC<GenerationProgressProps> = ({ message = "Gene
 
             {/* Progress message */}
             <p className="text-gray-300 mb-4 text-center">{message}</p>
+
+            {/* Time estimate message */}
+            <p className="text-sm text-gray-500 mb-4">
+                {estimate < 2
+                    ? 'This should take less than 2 seconds'
+                    : `This typically takes ${estimate}-${estimate + 2} seconds`
+                }
+            </p>
 
             {/* Progress bar with percentage */}
             <div className="w-full max-w-md">

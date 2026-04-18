@@ -547,8 +547,8 @@ const KeyDisplay: React.FC<KeyDisplayProps> = ({
     <div className="space-y-6">
         {isPgp && isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <GenerationProgress message="Generating PGP keypair..." percentage={undefined} />
-                <GenerationProgress message="Generating PGP keypair..." percentage={undefined} />
+                <GenerationProgress message="Generating PGP keypair..." percentage={undefined} algorithm={selectedAlgorithm} />
+                <GenerationProgress message="Generating PGP keypair..." percentage={undefined} algorithm={selectedAlgorithm} />
             </div>
         ) : isAsymmetricMode ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
