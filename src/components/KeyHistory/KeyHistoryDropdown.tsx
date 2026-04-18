@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { KeyProperties } from '../../types';
-import { getKeyHistory, removeFromKeyHistory, copyKeyToClipboard, clearKeyHistory } from '../../utils/keyHistory';
+import { getKeyHistory, removeFromKeyHistory, copyKeyToClipboard, clearKeyHistory, formatRelativeTime } from '../../utils/keyHistory';
 // Import icons directly since they're not exported from KeyGenerator
 const CheckIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -50,16 +50,7 @@ const KeyHistoryDropdown: React.FC<KeyHistoryDropdownProps> = ({ onSelect, onClo
   }, [isOpen, onClose]);
 
   const formatTimestamp = (timestamp: number): string => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return date.toLocaleDateString();
+    return formatRelativeTime(timestamp);
   };
 
   const handleCopy = async (key: string, id: string, event: React.MouseEvent) => {
